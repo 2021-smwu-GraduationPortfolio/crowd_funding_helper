@@ -5,23 +5,19 @@
     <center>
 
         <h1>  PREDICTION :  </h1>
-        {% for i in data %}
-          <h3> {{ i }} </h3>
-        {%endfor%}
+        {%for i in data%}
+        <h3>0</h3>
+        {{ i[0] }}
+        <a href = {{i[2]}}>{{i[1]}}</a>
+          {%endfor%}
+
 
 <!--
-    {%if data == 0%}
-    <h1>Iris-setosa</h1>
-    <img src='static\setosa.jpg'>
 
-    {%else%}
-    <h1>Iris-versicolor</h1>
-    <img src='static\verci.jpg'>
-
-    {%endif%}
 -->
         <br><br>
     <a href='/'>go back to home page</a>
+    <br>
     <a href='/creatorpage'>go back to creatorpage</a>
     </center>
 

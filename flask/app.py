@@ -228,7 +228,9 @@ def supporterpage():
             if i in j[0]:
                 final_word_list.append(i)
                 category_list.append(j[1])
-
+    print(2)
+    print(final_word_list)
+    print()
     word_len = len(final_word_list)
     category_len = len(category_list)
 
@@ -241,34 +243,56 @@ def supporterpage():
         similar_word=model29.wv.most_similar(positive=[final_word_list[i]],topn=5)
         for j in similar_word:
             if len(j[0])==1:
+                #print("pass")
                 continue
             else:
-                print(j[0])
-                sql = "select DISTINCT pagename, category, trim(title) from test.crawl where title like '%%%s%%'" %j[0]
+                #print(j[0])
+                sql = "select DISTINCT pagename, category, trim(title), id from test.crawl where title like '%%%s%%'" %j[0]
                 curs.execute(sql)
                 words = curs.fetchall()
                 conn.commit()
-            #print(words)
+                print("find projects")
+                print(words)
+                print()
                 length = len(words)
                 if length>3:
                     length = 3
-            #print(length)
                 for k in range(0,length):
+                    print("프로젝트별로 조건에 맞는지 확인")
                     tmp=[]
                     tmp.append(''.join(list(words[k][2])))
+                    print(tmp)
+                    print()
                     if words[k][1] == category_list[i] and tmp not in sent_list2 :
+                        print("ok")
                         final_projects.append(words[k])
-
+                        print(final_projects)
+                        print()
 
         final_projects_set = set(final_projects)
-        conn.close()
-        pred = list()
+        print(1)
+        print(final_projects_set)
+        print()
+        pred_list = list()
         for k in final_projects_set :
+            sql_url = "select url from test.urllist where id like '%d'" %k[3]
+            curs.execute(sql_url)
+            urll = curs.fetchall()
+            pred = list()
+            if urll :
+                urll= urll[0][0]
+            else :
+                break;
+
             pred.append(k[1]);
             pred.append(k[2]);
+            pred.append(urll);
 
-        return render_template('after.html', data=pred)
+            pred_list.append(pred)
 
+            conn.commit()
+        conn.close()
+        return render_template('after.html', data=pred_list)
 
 if __name__ == "__main__":
     app.run(port = 5000, debug=True)
