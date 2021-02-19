@@ -267,6 +267,7 @@ def supporterpage():
             if len(j[0])==1:
                 continue
             else:
+                print("j값비교 : ")
                 print(j[0])
                 sql = "select DISTINCT pagename, category, trim(title), id from test.crawl where title like '%%%s%%'" %j[0]
                 curs.execute(sql)
@@ -301,7 +302,7 @@ def supporterpage():
                 pred_list.append(pred)
 
     project_num = len(pred_list)
-    print(pred_list)
+    #print(pred_list)
 
     return render_template('after.html', data=pred_list, project_num = project_num)
 if __name__ == "__main__":

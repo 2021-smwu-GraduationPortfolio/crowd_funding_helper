@@ -124,7 +124,7 @@ def getcnt(res_set):
         else: continue
 
 def creatortitle():
-    conn = pymysql.connect(host='127.0.0.1',port = 3306,  user='root', password='0000',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='Pami1227!*',db='test', charset='utf8')
     curs = conn.cursor()
 
     title = request.form['a']
@@ -157,7 +157,7 @@ def creatortitle():
     return pred
 
 def creatorkeyword():
-    conn = pymysql.connect(host='127.0.0.1',port = 3306,  user='root', password='0000',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='Pami1227!*',db='test', charset='utf8')
     curs = conn.cursor()
 
     category = request.form['ca']
@@ -184,28 +184,35 @@ def creatorkeyword():
 def binder(client_socket, addr):
 # 커넥션이 되면 접속 주소가 나온다.
     print('Connected by', addr);
+
     try:
 # 접속 상태에서는 클라이언트로 부터 받을 데이터를 무한 대기한다.
 # 만약 접속이 끊기게 된다면 except가 발생해서 접속이 끊기게 된다.
         while True:
 # socket의 recv함수는 연결된 소켓으로부터 데이터를 받을 대기하는 함수입니다. 최초 4바이트를 대기합니다.
             data = client_socket.recv(4);
+
 # 최초 4바이트는 전송할 데이터의 크기이다. 그 크기는 little big 엔디언으로 byte에서 int형식으로 변환한다.
 # C#의 BitConverter는 big엔디언으로 처리된다.
             length = int.from_bytes(data, "little");
 # 다시 데이터를 수신한다.
             data = client_socket.recv(length);
+            #logger.info(data)
 # 수신된 데이터를 str형식으로 decode한다.
             msg = data.decode();
 # 수신된 메시지를 콘솔에 출력한다.
-            print('Received from', addr, msg);
+            #logger.info('Received from ', msg);
 # 수신된 메시지 앞에 「echo:」 라는 메시지를 붙힌다.
             #msg = "echo : " + msg;
             if msg[0:4] == "user":
                 pred_list = list()
                 pred_list = supporterpage(msg[4:])
-                msg = ''.join(pred_list)
-            print(msg)
+                #logger.info(pred_list)
+                msg = ''
+                for i in pred_list:
+                    msg = msg+''.join(str(i))
+
+            logger.info(msg)
             #elif msg[0:4] == ""
             # 바이너리(byte)형식으로 변환한다.
             data = msg.encode();
@@ -218,16 +225,16 @@ def binder(client_socket, addr):
     except:
 # 접속이 끊기면 except가 발생한다.
         print("except : " , addr);
-    finally:
+    #finally:
 # 접속이 끊기면 socket 리소스를 닫는다.
-        client_socket.close();
+        #client_socket.close();
 
 
 def supporterpage(username):
-    conn = pymysql.connect(host='127.0.0.1', port = 3306, user='root', password='0000',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='Pami1227!*',db='test', charset='utf8')
     curs = conn.cursor()
 
-    sql = "select distinct trim(I.title) from test.user_info I, test.crawl C where username like '%s' and C.title = I.title;"%username
+    sql = "select distinct trim(I.title) from test.user_info I, test.crawl C where username = '%s' and C.title = I.title;"%username
 
     curs.execute(sql)
     sent = curs.fetchall()
@@ -267,62 +274,78 @@ def supporterpage(username):
     category_len = len(category_list)
 
     final_projects=[]
-    similar_word_list=[]
+
 
     for i in tqdm(range(word_len)):
-        #print("key word: "+final_word_list[i], category_list[i])
-        #print()
         similar_word=model29.wv.most_similar(positive=[final_word_list[i]],topn=5)
+
         for j in similar_word:
             if len(j[0])==1:
                 continue
             else:
-                print(j[0])
+                print("j값비교 : ")
                 sql = "select DISTINCT pagename, category, trim(title), id from test.crawl where title like '%%%s%%'" %j[0]
                 curs.execute(sql)
                 words = curs.fetchall()
                 conn.commit()
-            #print(words)
                 length = len(words)
-                if length>3:
-                    length = 3
-            #print(length)
+                #if length>3:
+                #    length = 3
                 for k in range(0,length):
                     tmp=[]
                     tmp.append(''.join(list(words[k][2])))
                     if words[k][1] == category_list[i] and tmp not in sent_list2 :
                         final_projects.append(words[k])
 
+        res_set = set(final_projects)
+        pred_list=list()
 
-        final_projects_set = set(final_projects)
-        print(final_projects_set)
-        pred = list()
-        print(1)
-        pred_list = list()
-        for k in final_projects_set :
-            sql_url = "select url from test.urllist where id like '%d'" %k[3]
+        for k in res_set :
+            pred = list()
+            sql_url = "select url from test.urllist where id = '%d'" %k[3]
             curs.execute(sql_url)
             urll = curs.fetchall()
-
-
-            if urll :
+            if urll:
                 urll = urll[0][0]
-            else :
-                break
 
-            pred.append(k[1]);
-            pred.append(k[2]);
-            pred.append(urll);
-
-            pred_list.append(pred)
-            print(pred_list)
             conn.commit()
+            pred.append(k[1])
+            pred.append(k[2])
+            pred.append(urll)
+            if pred not in pred_list :
+                pred_list.append(pred)
 
-        conn.close()
-        return pred_list
+    project_num = len(pred_list)
+
+
+    return pred_list
+
+import logging
+
+def __get_logger():
+    """로거 인스턴스 반환
+    """
+
+    __logger = logging.getLogger('logger')
+
+    # 로그 포멧 정의
+    formatter = logging.Formatter(
+        'BATCH##AWSBATCH##%(levelname)s##%(asctime)s##%(message)s >> @@file::%(filename)s@@line::%(lineno)s')
+    # 스트림 핸들러 정의
+    stream_handler = logging.StreamHandler()
+    # 각 핸들러에 포멧 지정
+    stream_handler.setFormatter(formatter)
+    # 로거 인스턴스에 핸들러 삽입
+    __logger.addHandler(stream_handler)
+    # 로그 레벨 정의
+    __logger.setLevel(logging.DEBUG)
+
+    return __logger
 
 
 if __name__ == "__main__":
+    print("start")
+    logger = __get_logger()
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
     # 소켓 레벨과 데이터 형태를 설정한다.
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1);
@@ -331,6 +354,7 @@ if __name__ == "__main__":
     server_socket.bind(('', 9000));
     # server 설정이 완료되면 listen를 시작한다.
     server_socket.listen();
+
     try:
         # 서버는 여러 클라이언트를 상대하기 때문에 무한 루프를 사용한다.
         while True:

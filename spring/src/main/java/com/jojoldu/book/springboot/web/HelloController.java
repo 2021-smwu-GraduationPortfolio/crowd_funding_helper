@@ -46,7 +46,8 @@ public class HelloController {
         request.setCharacterEncoding("utf-8");
 
         String username = request.getParameter("a");
-        username = new String(username.getBytes("8859_1"),"utf-8");
+        System.out.println("origin username : "+username);
+        //username = new String(username.getBytes("8859_1"),"utf-8");
         String res = "failed";
         // 소켓을 선언한다.
         try (Socket client = new Socket()) {
@@ -76,8 +77,12 @@ public class HelloController {
                     System.out.println("data 보내짐");
 // 데이터 길이를 받는다.
                     receiver.read(data, 0, 4);
-// ByteBuffer를 통해 little 엔디언 형식으로 데이터 길이를 구한다.
+// Byte Buffer를 통해 little 엔디언 형식으로 데이터 길이를 구한다.
                     ByteBuffer bb = ByteBuffer.wrap(data);
+                    //System.out.println(String.format("바이트 버퍼 초기 값 : %s", bb));
+                    /*while(bb.hasRemaining()){
+                        System.out.println(bb.get()+",");
+                    }*/
                     bb.order(ByteOrder.LITTLE_ENDIAN);
                     int length = bb.getInt();
 // 데이터를 받을 버퍼를 선언한다.
