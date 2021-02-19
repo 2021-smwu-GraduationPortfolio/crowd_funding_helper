@@ -12,6 +12,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 import pymysql
 from tqdm.notebook import tqdm
+from flask import g
 
 import sys
 if sys.version_info <= (2,7):
@@ -19,10 +20,10 @@ if sys.version_info <= (2,7):
     sys.setdefaultencoding('utf-8')
 import konlpy
 from konlpy.tag import Kkma, Okt, Hannanum
-
+'''
 global t_cnt
 global w_cnt
-
+'''
 model29 = Word2Vec.load('NaverMovie29.model')
 model30 = Word2Vec.load('NaverMovie30.model')
 
@@ -92,28 +93,50 @@ def getsimilarwordlist(selected_word, similar_word_list):
 def getresset(similar_word_set, category, curs):
     res_list=[]
     for i in similar_word_set:
-        sql = 'select pagename,trim(title), achieve, goal from test.crawl where category="%s" and title like "%%%s%%" and achieve>=90;'%(category,i)
+        sql = 'select pagename, trim(title), achieve, goal, id from test.crawl where category="%s" and title like "%%%s%%" and achieve>=90;'%(category,i)
         curs.execute(sql)
         pagename = curs.fetchall()
 
         length = len(pagename)
-        if length > 3:
-            length = 3
+        #if length > 3:
+        #    length = 3
 
         for k in range(0,length):
-            res_list.append((pagename[k][0], pagename[k][1], pagename[k][2], pagename[k][3]))   # pagename, title, achieve, goal
+            res_list.append((pagename[k][0], pagename[k][1], pagename[k][2], pagename[k][3], pagename[k][4]))   # pagename, title, achieve, goal
 
     res_set = set(res_list)
     return res_set
 
 def getcnt(res_set):
-    w_cnt = 0
-    t_cnt = 0
+    g.w_cnt = 0
+    g.t_cnt = 0
 
     for k in res_set:
-        if k[0] == 'tumblbug': t_cnt+=1
-        elif k[0] == 'wadiz': w_cnt+=1
+        if k[0] == 'tumblbug': g.t_cnt+=1
+        elif k[0] == 'wadiz': g.w_cnt+=1
         else: continue
+
+def getCreatorPredList(res_set, curs, conn) :
+    pred_list = list()
+    for k in res_set:
+        sql_url = "select url from test.urllist where id like '%d'" %k[4]
+        curs.execute(sql_url)
+        urll = curs.fetchall()
+        pred = list()
+        if urll :
+            urll= urll[0][0]
+
+        pred.append(k[0])
+        pred.append(k[1])
+        pred.append(urll)
+        pred.append(k[2])
+        pred.append(k[3])
+
+        if pred not in pred_list :
+            pred_list.append(pred)
+        conn.commit()
+    return pred_list
+
 
 @app.route('/')
 def main():
@@ -153,13 +176,12 @@ def creatortitle():
 
     getcnt(res_set)
 
+    pred_list = getCreatorPredList(res_set, curs, conn)
+    project_num = len(pred_list)
+
     conn.close()
+    return render_template('after_creator.html', data=pred_list, project_num = project_num, w_cnt = g.w_cnt, t_cnt = g.t_cnt)
 
-    pred = list()
-    for k in res_set:
-        pred.append(k[1])
-
-    return render_template('after.html', data=pred)
 
 @app.route('/creatorkeyword', methods=['POST'])
 def creatorkeyword():
@@ -174,18 +196,21 @@ def creatorkeyword():
     similar_word_list = getsimilarwordlist(selected_word,similar_word_list)
     similar_word_set = set(similar_word_list)
 
+    print(1)
+    print(similar_word_set)
+
     res_set= set()
-    res_set = getresset(similar_word_set, category,curs)
+    res_set = getresset(similar_word_set, category, curs)
+    print(2)
+    print(res_set)
 
     getcnt(res_set)
 
+    pred_list = getCreatorPredList(res_set, curs, conn)
+    project_num = len(pred_list)
+
     conn.close()
-
-    pred = list()
-    for k in res_set:
-        pred.append(k[1])
-
-    return render_template('after.html', data=pred)
+    return render_template('after_creator.html', data=pred_list, project_num = project_num, w_cnt = g.w_cnt, t_cnt = g.t_cnt)
 
 @app.route('/supporterpage', methods=['POST'])
 def supporterpage():
@@ -193,7 +218,7 @@ def supporterpage():
     curs = conn.cursor()
 
     username = request.form['a']
-    sql = "select distinct trim(I.title) from test.user_info I, test.crawl C where username like '%s' and C.title = I.title;"%username
+    sql = "select distinct trim(I.title) from test.user_info I, test.crawl C where username = '%s' and C.title = I.title;"%username
 
     curs.execute(sql)
     sent = curs.fetchall()
@@ -228,9 +253,7 @@ def supporterpage():
             if i in j[0]:
                 final_word_list.append(i)
                 category_list.append(j[1])
-    print(2)
-    print(final_word_list)
-    print()
+
     word_len = len(final_word_list)
     category_len = len(category_list)
 
@@ -238,61 +261,48 @@ def supporterpage():
     similar_word_list=[]
 
     for i in tqdm(range(word_len)):
-        #print("key word: "+final_word_list[i], category_list[i])
-        #print()
         similar_word=model29.wv.most_similar(positive=[final_word_list[i]],topn=5)
         for j in similar_word:
+            print('similar_word : ',similar_word)
             if len(j[0])==1:
-                #print("pass")
                 continue
             else:
-                #print(j[0])
+                print(j[0])
                 sql = "select DISTINCT pagename, category, trim(title), id from test.crawl where title like '%%%s%%'" %j[0]
                 curs.execute(sql)
                 words = curs.fetchall()
                 conn.commit()
-                print("find projects")
-                print(words)
-                print()
                 length = len(words)
-                if length>3:
-                    length = 3
+                #if length>3:
+                #    length = 3
                 for k in range(0,length):
-                    print("프로젝트별로 조건에 맞는지 확인")
                     tmp=[]
                     tmp.append(''.join(list(words[k][2])))
-                    print(tmp)
-                    print()
                     if words[k][1] == category_list[i] and tmp not in sent_list2 :
-                        print("ok")
                         final_projects.append(words[k])
-                        print(final_projects)
-                        print()
 
-        final_projects_set = set(final_projects)
-        print(1)
-        print(final_projects_set)
-        print()
-        pred_list = list()
-        for k in final_projects_set :
-            sql_url = "select url from test.urllist where id like '%d'" %k[3]
+
+        res_set = set(final_projects)
+        pred_list=list()
+
+        for k in res_set :
+            pred = list()
+            sql_url = "select url from test.urllist where id = '%d'" %k[3]
             curs.execute(sql_url)
             urll = curs.fetchall()
-            pred = list()
-            if urll :
-                urll= urll[0][0]
-            else :
-                break;
-
-            pred.append(k[1]);
-            pred.append(k[2]);
-            pred.append(urll);
-
-            pred_list.append(pred)
+            if urll:
+                urll = urll[0][0]
 
             conn.commit()
-        conn.close()
-        return render_template('after.html', data=pred_list)
+            pred.append(k[1])
+            pred.append(k[2])
+            pred.append(urll)
+            if pred not in pred_list :
+                pred_list.append(pred)
 
+    project_num = len(pred_list)
+    print(pred_list)
+
+    return render_template('after.html', data=pred_list, project_num = project_num)
 if __name__ == "__main__":
     app.run(port = 5000, debug=True)
