@@ -34,25 +34,5 @@ public class PostsApiController {
         postsService.delete(id);
         return id;
     }
-    @GetMapping("/supporter")
-    public String Supporter(Model model){
 
-        return "<html>\n" +
-                "<body bgcolor=#d4a3ae>\n" +
-                "\n" +
-                "<center>\n" +
-                "\n" +
-                "    <h1> supporter </h1><br>\n" +
-                "\n" +
-                "    <form method=\"POST\", action=\"/supporterpage\">\n" +
-                "        <b> user name :  <input type=\"text\", name='a', placeholder=\"enter 1\"> <br><br></b>\n" +
-                "        <input type=\"submit\" , value='predict!' >\n" +
-                "    </form>\n" +
-                "\n" +
-                "\n" +
-                "</center>\n" +
-                "\n" +
-                "</body>\n" +
-                "</html>\n";
-    }
 }

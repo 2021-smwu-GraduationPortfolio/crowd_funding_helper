@@ -37,6 +37,16 @@ public class HelloController {
 
         return "mainpage";
     }
+    @GetMapping("/supporter")
+    public String Supporter(Model model){
+        return "supporter";
+    }
+
+    @GetMapping("/creator")
+    public String Creator(Model model){
+        return "creator";
+    }
+
 
 
     @PostMapping(value = "/supporterpage")
