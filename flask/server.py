@@ -167,6 +167,7 @@ def creatortitle(category, title):
     similar_word_list = []
     similar_word_list = getsimilarwordlist(selected_word, similar_word_list)
 
+
     if len(selected_word) < 5:
         similar_word_list = similar_word_list + selected_word
 
@@ -177,38 +178,38 @@ def creatortitle(category, title):
     getcnt(res_set)
 
     pred = getCreatorPredList(res_set, curs, conn)
-    """
-    pred = list()
-    for k in res_set:
-        pred.append(k[1])
-    """
+
     logger.info(pred)
     logger.info(type(pred))
     conn.close()
     return pred
 
-def creatorkeyword():
+def creatorkeyword(category, keyword):
     conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
 
-    category = request.form['ca']
-    keyword = request.form['a']
     selected_word = keyword.split(' ')
 
     similar_word_list = []
     similar_word_list = getsimilarwordlist(selected_word,similar_word_list)
+
+    if len(selected_word) < 5:
+        similar_word_list = similar_word_list + selected_word
+
     similar_word_set = set(similar_word_list)
+    logger.info('similar_word_set')
+    logger.info(similar_word_set)
 
     res_set= set()
     res_set = getresset(similar_word_set, category,curs)
 
     getcnt(res_set)
 
-    conn.close()
+    pred = getCreatorPredList(res_set, curs, conn)
 
-    pred = list()
-    for k in res_set:
-        pred.append(k[1])
+    logger.info(pred)
+    logger.info(type(pred))
+    conn.close()
 
     return pred
 
@@ -254,7 +255,7 @@ def binder(client_socket, addr):
                 for i in pred_list:
                     msg = msg+''.join(str(i))
 
-            else :
+            elif "title" in msg :
                 logger.info('cate안')
                 logger.info('msg')
                 logger.info(msg)
@@ -270,6 +271,18 @@ def binder(client_socket, addr):
                 for i in pred_list:
                     msg = msg+''.join(str(i))
                 """
+            elif "keyword" in msg :
+                logger.info('keyword안')
+                logger.info('msg')
+                logger.info(msg)
+                msgList = list()
+                msgList = msg.split('keyword')
+                logger.info(msgList)
+                pred_list = []
+                pred_list = creatorkeyword(msgList[0], msgList[1])
+
+                logger.info(pred_list)
+
             pred_list = str(pred_list)
             logger.info('pred_list')
             logger.info(pred_list)
