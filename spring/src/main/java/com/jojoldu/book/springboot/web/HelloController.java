@@ -22,6 +22,7 @@ import java.util.List;
 @Controller
 
 public class HelloController {
+
     @GetMapping("/hello")
     public String hello(){
         return "hello";
@@ -152,6 +153,8 @@ public class HelloController {
 
     @PostMapping(value = "/creatortitle")
     public String CreatorTitle(Model model, HttpServletRequest request) throws UnsupportedEncodingException {
+        int t_cnt = 0;
+        int w_cnt = 0;
         request.setCharacterEncoding("utf-8");
 
         String category = request.getParameter("ca");
@@ -218,7 +221,7 @@ public class HelloController {
                         subjson = new JSONObject();
                         continue;
                     } else if (res.charAt(i) == ']') {
-                        subjson.put("url", completeData);
+                        subjson.put("goal", completeData);
                         sendjson.add(subjson);
                         continue;
                     } else if (res.charAt(i) == '\'') {
@@ -226,9 +229,17 @@ public class HelloController {
                     } else if (res.charAt(i) == ',' && res.charAt(i + 1) == ' ') {
                         i += 1;
                         if (variableNum == 0) {
-                            subjson.put("category", completeData);
+                            subjson.put("pagename", completeData);
+                            if (completeData.equals("tumblbug")){
+                                t_cnt = t_cnt + 1;
+
+                            } else if (completeData.equals("wadiz")) {
+                                w_cnt = w_cnt + 1;
+                            }
                         }
-                        else if (variableNum == 1) subjson.put("title", completeData);
+                        else if (variableNum == 1) subjson.put("content", completeData);
+                        else if (variableNum == 2) subjson.put("url", completeData);
+                        else if (variableNum == 3) subjson.put("achieve", completeData);
                         variableNum += 1;
                         completeData = "";
                         continue;
@@ -246,7 +257,9 @@ public class HelloController {
         }
 
         model.addAttribute("test1", sendjson);
-        return "afterCreator";
+        model.addAttribute("t_cnt", t_cnt);
+        model.addAttribute("w_cnt", w_cnt);
+        return "creatorpage";
 
     }
 

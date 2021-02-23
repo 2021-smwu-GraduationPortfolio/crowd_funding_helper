@@ -152,7 +152,7 @@ def supporterinput():
 
 @app.route('/creatortitle', methods=['POST'])
 def creatortitle():
-    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='****',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
 
     title = request.form['a']
@@ -176,7 +176,7 @@ def creatortitle():
 
     getcnt(res_set)
 
-    pred_list = getCreatorPredList(res_set, curs, conn)
+    pred_list = getCreatorPredList(pred_list, curs, conn)
     project_num = len(pred_list)
 
     conn.close()
@@ -185,7 +185,7 @@ def creatortitle():
 
 @app.route('/creatorkeyword', methods=['POST'])
 def creatorkeyword():
-    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
 
     category = request.form['ca']
@@ -214,7 +214,7 @@ def creatorkeyword():
 
 @app.route('/supporterpage', methods=['POST'])
 def supporterpage():
-    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
 
     username = request.form['a']

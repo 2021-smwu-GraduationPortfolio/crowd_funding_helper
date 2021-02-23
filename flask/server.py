@@ -1,4 +1,4 @@
-
+# -*- conding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from gensim.models import Word2Vec
 import pickle
@@ -12,6 +12,7 @@ from sklearn.manifold import TSNE
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 import pymysql
+
 # 소켓을 사용하기 위해서는 socket을 import해야 한다.
 import socket, threading;
 
@@ -100,7 +101,7 @@ def getsimilarwordlist(selected_word, similar_word_list):
 def getresset(similar_word_set, category, curs):
     res_list=[]
     for i in similar_word_set:
-        sql = 'select pagename,trim(title), achieve, goal from test.crawl where category="%s" and title like "%%%s%%" and achieve>=90;'%(category,i)
+        sql = 'select pagename,trim(title), achieve, goal, id from test.crawl where category="%s" and title like "%%%s%%" and achieve>=90;'%(category,i)
         curs.execute(sql)
         pagename = curs.fetchall()
 
@@ -109,10 +110,34 @@ def getresset(similar_word_set, category, curs):
             length = 3
 
         for k in range(0,length):
-            res_list.append((pagename[k][0], pagename[k][1], pagename[k][2], pagename[k][3]))   # pagename, title, achieve, goal
-
+            res_list.append((pagename[k][0], pagename[k][1], pagename[k][2], pagename[k][3], pagename[k][4]))   # pagename, title, achieve, goal
+            logger.info('res_list')
+            logger.info(res_list)
     res_set = set(res_list)
+    logger.info('res_set')
+    logger.info(res_set)
     return res_set
+
+def getCreatorPredList(res_set, curs, conn) :
+    pred_list = list()
+    for k in res_set:
+        sql_url = "select url from test.urllist where id like '%d'" %k[4]
+        curs.execute(sql_url)
+        urll = curs.fetchall()
+        pred = list()
+        if urll :
+            urll= urll[0][0]
+
+        pred.append(k[0])
+        pred.append(k[1])
+        pred.append(urll)
+        pred.append(k[2])
+        pred.append(k[3])
+
+        if pred not in pred_list :
+            pred_list.append(pred)
+        conn.commit()
+    return pred_list
 
 def getcnt(res_set):
     w_cnt = 0
@@ -123,12 +148,15 @@ def getcnt(res_set):
         elif k[0] == 'wadiz': w_cnt+=1
         else: continue
 
-def creatortitle():
-    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='Pami1227!*',db='test', charset='utf8')
+def creatortitle(category, title):
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
-
-    title = request.form['a']
-    category = request.form['ca']
+    logger.info('title')
+    logger.info(title)
+    logger.info('category')
+    logger.info(category)
+    #title = request.form['a']
+    #category = request.form['ca']
     tokenized_project_title = set(okt.nouns(title))
 
     selected_word = []
@@ -148,16 +176,19 @@ def creatortitle():
 
     getcnt(res_set)
 
-    conn.close()
-
+    pred = getCreatorPredList(res_set, curs, conn)
+    """
     pred = list()
     for k in res_set:
         pred.append(k[1])
-
+    """
+    logger.info(pred)
+    logger.info(type(pred))
+    conn.close()
     return pred
 
 def creatorkeyword():
-    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='Pami1227!*',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
 
     category = request.form['ca']
@@ -197,31 +228,62 @@ def binder(client_socket, addr):
             length = int.from_bytes(data, "little");
 # 다시 데이터를 수신한다.
             data = client_socket.recv(length);
+            logger.info("data")
+            logger.info(data)
+            #logger.info("after receiving, data : ", data)
             #logger.info(data)
 # 수신된 데이터를 str형식으로 decode한다.
             msg = data.decode();
+            logger.info("after decoding")
+            logger.info("data")
+            logger.info(data)
+            logger.info("msg")
+            logger.info(msg)
+
 # 수신된 메시지를 콘솔에 출력한다.
             #logger.info('Received from ', msg);
 # 수신된 메시지 앞에 「echo:」 라는 메시지를 붙힌다.
             #msg = "echo : " + msg;
             if msg[0:4] == "user":
-                pred_list = list()
+                logger.info(msg)
+                pred_list = []
                 pred_list = supporterpage(msg[4:])
-                #logger.info(pred_list)
+
+                logger.info(pred_list)
                 msg = ''
                 for i in pred_list:
                     msg = msg+''.join(str(i))
 
-            logger.info(msg)
+            else :
+                logger.info('cate안')
+                logger.info('msg')
+                logger.info(msg)
+                msgList = list()
+                msgList = msg.split('title')
+                logger.info(msgList)
+                pred_list = []
+                pred_list = creatortitle(msgList[0], msgList[1])
+
+                logger.info(pred_list)
+                """
+                msg = ''
+                for i in pred_list:
+                    msg = msg+''.join(str(i))
+                """
+            pred_list = str(pred_list)
+            logger.info('pred_list')
+            logger.info(pred_list)
+            # logger.info(msg)
             #elif msg[0:4] == ""
             # 바이너리(byte)형식으로 변환한다.
-            data = msg.encode();
+            data = pred_list.encode();
             # 바이너리의 데이터 사이즈를 구한다.
             length = len(data);
             # 데이터 사이즈를 little 엔디언 형식으로 byte로 변환한 다음 전송한다.
             client_socket.sendall(length.to_bytes(4, byteorder='little'));
             # 데이터를 클라이언트로 전송한다.
             client_socket.sendall(data);
+
     except:
 # 접속이 끊기면 except가 발생한다.
         print("except : " , addr);
@@ -229,17 +291,18 @@ def binder(client_socket, addr):
 # 접속이 끊기면 socket 리소스를 닫는다.
         #client_socket.close();
 
-
 def supporterpage(username):
-    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', password='Pami1227!*',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
 
-    sql = "select distinct trim(I.title) from test.user_info I, test.crawl C where username = '%s' and C.title = I.title;"%username
+    logger.info("supporterpage 안")
 
+    sql = "select distinct trim(I.title) from test.user_info I, test.crawl C where username = '%s' and C.title = I.title;"%username
     curs.execute(sql)
     sent = curs.fetchall()
-
-    curs.execute(sql)
+    logger.info("sent")
+    logger.info(sent)
+    #curs.execute(sql)
     title_with_category = curs.fetchall()
 
     noun_set = set(okt.nouns(str(sent)))
