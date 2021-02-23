@@ -4,23 +4,71 @@
 <head>
     <title></title>
 </head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+        function CheckSelect() {
+            if (document.getElementById("dropselect").selectedIndex == 0)
+            {
+
+                alert("입력값을 선택하시오");
+                document.getElementById("dropselect").focus();
+            }
+            else if(document.getElementById("dropselect").value === "title")
+            {
+                console.log(document.getElementById("dropselect").value);
+
+                var element = document.getElementById("titlepage");
+                if(element.style.display == 'none'){
+                  element.style.display='block';
+                }
+                else {
+                  element.style.display='none';
+                }
+            }
+            else {
+              console.log(document.getElementById("dropselect").value);
+
+              var element = document.getElementById("keywordpage");
+              if(element.style.display == 'none'){
+                element.style.display='block';
+              }
+              else {
+                element.style.display='none';
+              }
+            }
+        }
+    </script>
+</head>
 <body>
 <center>
-    <h1> creator </h1><br>
-    <link rel="stylesheet" href="style.css" />
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="mustache.js"></script>
-    <script type="text/javascript" src="mustache-demos.js"></script>
-    <script>
-function process() {
-  var template, data, html;
-  template = $('#template').val();
-  eval( $('#data').val() );
-  html = Mustache.render( template, data );
-  $('#html').text( html );
-  $('#result').html( html );
-}
-</script>
+    <h1> funding creator </h1><br>
+    <select id="dropselect">
+        <option value="">- 선택 -</option>
+        <option value="title">타이틀 입력</option>
+        <option value="keyword">키워드 입력</option>
+    </select>
+    <input type="button" value="확인" onclick="CheckSelect();" />
+
+    <span id="titlepage" style ="display:none">
+      <form method="POST", action="/creatortitle">
+        <b>
+          Category :  <input type="text", name='ca', placeholder="enter 1"> <br><br>
+          Title :  <input type="text", name='a', placeholder="enter 1"> <br><br>
+        </b>
+        <input type="submit" , value='predict!' >
+      </form>
+    </span>
+
+    <div id="keywordpage" style="display:none">
+        <form method="POST", action="/creatorkeyword">
+            <b> Category :  <input type="text", name='ca', placeholder="category"> <br><br>
+                Keyword :  <input type="text", required name='a', placeholder="keyword"> <br><br>
+            </b>
+            <input type="submit" , value='결과 보기' >
+        </form>
+    </div>
 
 </center>
 </body>
