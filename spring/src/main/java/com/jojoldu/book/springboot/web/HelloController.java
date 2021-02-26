@@ -121,6 +121,7 @@ public class HelloController {
                     } else if (res.charAt(i) == ']') {
                         subjson.put("url", completeData);
                         sendjson.add(subjson);
+                        if (res.charAt(i+1) == ']') break;
                         continue;
                     } else if (res.charAt(i) == '\'') {
                         continue;
@@ -223,6 +224,7 @@ public class HelloController {
                     } else if (res.charAt(i) == ']') {
                         subjson.put("goal", completeData);
                         sendjson.add(subjson);
+                        if (res.charAt(i+1) == ']') break;
                         continue;
                     } else if (res.charAt(i) == '\'') {
                         continue;
