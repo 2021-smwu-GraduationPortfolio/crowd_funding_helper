@@ -37,7 +37,7 @@ model30 = Word2Vec.load('NaverMovie30.model')
 
 app = Flask(__name__)
 
-article_data_10 = pd.read_csv('mixver10.txt', encoding='utf-8', header= None)
+article_data_10 = pd.read_csv('mixver11.txt', encoding='utf-8', header= None)
 documents_10 = [' '.join(i[0].split(' ')[1:]) for i in article_data_10.values]
 
 article_data_9 = pd.read_csv('mixver9.txt', encoding='utf-8', header= None)
@@ -88,6 +88,8 @@ def getsimilarwordlist(selected_word, similar_word_list):
     for i in selected_word:
         try:
             similar_word=model30.wv.most_similar(positive=[i],topn=2)
+            logger.info(i)
+            logger.info(similar_word)
         except:
             continue
         for j in similar_word:
@@ -96,9 +98,14 @@ def getsimilarwordlist(selected_word, similar_word_list):
                 continue
             else:
                 similar_word_list.append(j[0])
+
+    logger.info('similar_word_list')
+    logger.info(similar_word_list)
     return similar_word_list
 
 def getresset(similar_word_set, category, curs):
+    logger.info('similar_word_set')
+    logger.info(similar_word_set)
     res_list=[]
     for i in similar_word_set:
         sql = 'select pagename,trim(title), achieve, goal, id from test.crawl where category="%s" and title like "%%%s%%" and achieve>=90;'%(category,i)
@@ -111,8 +118,8 @@ def getresset(similar_word_set, category, curs):
 
         for k in range(0,length):
             res_list.append((pagename[k][0], pagename[k][1], pagename[k][2], pagename[k][3], pagename[k][4]))   # pagename, title, achieve, goal
-            logger.info('res_list')
-            logger.info(res_list)
+            # logger.info('res_list')
+            # logger.info(res_list)
     res_set = set(res_list)
     logger.info('res_set')
     logger.info(res_set)
@@ -158,6 +165,8 @@ def creatortitle(category, title):
     #title = request.form['a']
     #category = request.form['ca']
     tokenized_project_title = set(okt.nouns(title))
+    logger.info('tokenized_project_title')
+    logger.info(tokenized_project_title)
 
     selected_word = []
     for i in tokenized_project_title:
@@ -167,9 +176,7 @@ def creatortitle(category, title):
     similar_word_list = []
     similar_word_list = getsimilarwordlist(selected_word, similar_word_list)
 
-
-    if len(selected_word) < 5:
-        similar_word_list = similar_word_list + selected_word
+    similar_word_list = similar_word_list + selected_word
 
     similar_word_set = set(similar_word_list)
     res_set = set()
@@ -197,8 +204,7 @@ def creatorkeyword(category, keyword):
         similar_word_list = similar_word_list + selected_word
 
     similar_word_set = set(similar_word_list)
-    logger.info('similar_word_set')
-    logger.info(similar_word_set)
+
 
     res_set= set()
     res_set = getresset(similar_word_set, category,curs)
