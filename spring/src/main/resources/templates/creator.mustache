@@ -1,8 +1,10 @@
+<!DOCTYPE HTML>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
     <script type="text/javascript">
-        function ModeSelect() {
+        function CheckSelect() {
             if (document.getElementById("dropselect").selectedIndex == 0)
             {
 
@@ -37,16 +39,6 @@
                 }
             }
         }
-        function CategorySelect() {
-            if (document.getElementById("CategorySelect").selectedIndex == 0)
-            {
-                alert("입력값을 선택하시오");
-                document.getElementById("CategorySelect").focus();
-            }
-            var i = document.getElementById("categoryselect");
-            var va = i.options[i.selectedIndex].value;
-
-        }
     </script>
 </head>
 <body>
@@ -57,36 +49,12 @@
         <option value="title">타이틀 입력</option>
         <option value="keyword">키워드 입력</option>
     </select>
-    <input type="button" value="확인" onclick="ModeSelect();" />
+    <input type="button" value="확인" onclick="CheckSelect();" />
 
     <span id="titlepage" style ="display:none">
       <form method="POST", action="/creatortitle">
         <b>
-          Category :  <select id="categoryselect" name="ca", onChange="CategorySelect();">
-                        <option value="뷰티">뷰티</option>
-                        <option value="반려동물">반려동물</option>
-                        <option value="디자인">디자인</option>
-                        <option value="테크">테크</option>
-                        <option value="음악">음악</option>
-                        <option value="출판">출판</option>
-                        <option value="페스티벌">페스티벌</option>
-                        <option value="패션">패션</option>
-                        <option value="취미">취미</option>
-                        <option value="푸드">푸드</option>
-                        <option value="예술">예술</option>
-                        <option value="만화">만화</option>
-                        <option value="공연">공연</option>
-                        <option value="영화·비디오">영화·비디오</option>
-                        <option value="온라인게임">온라인게임</option>
-                        <option value="오프라인게임">오프라인게임</option>
-                        <option value="홈리빙">홈리빙</option>
-                        <option value="교육·키즈">교육·키즈</option>
-                        <option value="여행·레저">여행·레저</option>
-                        <option value="소셜·캠페인">소셜·캠페인</option>
-                        <option value="기부·후원">기부·후원</option>
-                        <option value="사진">사진</option>
-                      </select>
-            <br><br>
+          Category :  <input type="text", name='ca', placeholder="enter 1"> <br><br>
           Title :  <input type="text", name='a', placeholder="enter 1"> <br><br>
         </b>
         <input type="submit" , value='결과 보기' >
@@ -95,31 +63,7 @@
 
     <div id="keywordpage" style="display:none">
         <form method="POST", action="/creatorkeyword">
-            <b> Category :  <select id="categoryselect" name="ca", onChange="CategorySelect();">
-                <option value="뷰티">뷰티</option>
-                <option value="반려동물">반려동물</option>
-                <option value="디자인">디자인</option>
-                <option value="테크">테크</option>
-                <option value="음악">음악</option>
-                <option value="출판">출판</option>
-                <option value="페스티벌">페스티벌</option>
-                <option value="패션">패션</option>
-                <option value="취미">취미</option>
-                <option value="푸드">푸드</option>
-                <option value="예술">예술</option>
-                <option value="만화">만화</option>
-                <option value="공연">공연</option>
-                <option value="영화·비디오">영화·비디오</option>
-                <option value="온라인게임">온라인게임</option>
-                <option value="오프라인게임">오프라인게임</option>
-                <option value="홈리빙">홈리빙</option>
-                <option value="교육·키즈">교육·키즈</option>
-                <option value="여행·레저">여행·레저</option>
-                <option value="소셜·캠페인">소셜·캠페인</option>
-                <option value="기부·후원">기부·후원</option>
-                <option value="사진">사진</option>
-            </select>
-                <br><br>
+            <b> Category :  <input type="text", name='ca', placeholder="category"> <br><br>
                 Keyword :  <input type="text", required name='a', placeholder="keyword"> <br><br>
             </b>
             <input type="submit" , value='결과 보기' >
