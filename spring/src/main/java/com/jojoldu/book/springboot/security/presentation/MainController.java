@@ -3,13 +3,14 @@ package com.jojoldu.book.springboot.security.presentation;
 import com.jojoldu.book.springboot.security.domain.UserEntity;
 import com.jojoldu.book.springboot.security.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 
 @Controller
@@ -33,6 +34,7 @@ public class MainController {
         return "redirect:/login";
          */
     }
+
     @PostMapping("/signUp")
     public String signUp(Model model, HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("utf-8");

@@ -6,6 +6,19 @@
     <title></title>
 </head>
 <body>
+<div class="collapse navbar-collapse" id="navbar-collapse2">
+    <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="../index.html">Posts</a></li>
+        {{^sessionedUser}}
+            <li>로그인</li>
+            <li>회원가입</li>
+        {{/sessionedUser}}
+        {{#sessionedUser}}
+            <li>로그아웃</li>
+            <li>개인정보수정</li>
+        {{/sessionedUser}}
+    </ul>
+</div>
 <center>
     <h1> main </h1><br>
 

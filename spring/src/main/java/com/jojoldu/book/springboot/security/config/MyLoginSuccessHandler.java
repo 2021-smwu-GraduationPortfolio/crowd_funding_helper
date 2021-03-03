@@ -1,5 +1,6 @@
 package com.jojoldu.book.springboot.security.config;
 
+import com.jojoldu.book.springboot.security.domain.HttpSessionUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -14,6 +15,7 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException{
         HttpSession session = request.getSession();
         session.setAttribute("greeting", authentication.getName()+"님 반갑습니다.");
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, authentication.getName());
 
         response.sendRedirect("/index2");
     }
