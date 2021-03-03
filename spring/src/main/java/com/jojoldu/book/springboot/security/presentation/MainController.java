@@ -5,7 +5,12 @@ import com.jojoldu.book.springboot.security.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 
 @Controller
 public class MainController {
@@ -17,10 +22,29 @@ public class MainController {
 
     @GetMapping("/signUp")
     public String singUp(){
-        UserEntity user = UserEntity.builder()
+
+        return "signUp";
+        /*UserEntity user = UserEntity.builder()
                 .name("username")
                 .password(passwordEncoder.encode("1234"))
                 .role("user")
+                .build();
+        userRepository.save(user);
+        return "redirect:/login";
+         */
+    }
+    @PostMapping("/signUp")
+    public String signUp(Model model, HttpServletRequest request) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("utf-8");
+        String id = request.getParameter("email");
+        String pw = request.getParameter("pw");
+
+        System.out.println(id);
+        System.out.println(pw);
+        UserEntity user = UserEntity.builder()
+                .name(id)
+                .password(passwordEncoder.encode(pw))
+                .role("supporter")
                 .build();
         userRepository.save(user);
         return "redirect:/login";
