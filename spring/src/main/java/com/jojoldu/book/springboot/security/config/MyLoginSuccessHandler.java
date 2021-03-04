@@ -17,6 +17,6 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
         session.setAttribute("greeting", authentication.getName()+"님 반갑습니다.");
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, authentication.getName());
 
-        response.sendRedirect("/index2");
+        response.sendRedirect("/");
     }
 }

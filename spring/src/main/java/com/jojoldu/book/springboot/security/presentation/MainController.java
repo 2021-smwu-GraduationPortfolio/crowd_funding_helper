@@ -49,7 +49,7 @@ public class MainController {
                 .role("supporter")
                 .build();
         userRepository.save(user);
-        return "redirect:/login";
+        return "redirect:/";
     }
 
     @GetMapping("/index2")

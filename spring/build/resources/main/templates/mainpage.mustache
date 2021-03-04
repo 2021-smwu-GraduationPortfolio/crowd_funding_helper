@@ -8,14 +8,14 @@
 <body>
 <div class="collapse navbar-collapse" id="navbar-collapse2">
     <ul class="nav navbar-nav navbar-right">
-        <li class="active"><a href="../index.html">Posts</a></li>
+
         {{^sessionedUser}}
-            <li>로그인</li>
-            <li>회원가입</li>
+            <a href = "/login"><li>로그인</li></a>
+            <a href = "/signUp"><li>회원가입</li></a>
         {{/sessionedUser}}
         {{#sessionedUser}}
-            <li>로그아웃</li>
-            <li>개인정보수정</li>
+            <a href = "/doLogout"><li>로그아웃</li></a>
+
         {{/sessionedUser}}
     </ul>
 </div>
