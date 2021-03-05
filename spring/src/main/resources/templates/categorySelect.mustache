@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang = "en">
+<head>
+    <script src="/js/categorySelect.js" ></script>
+    <link rel="stylesheet" src="/css/categorySelect.css" />
+    <meta charset="UTF-8">
+    <title>Choose Category</title>
+</head>
+<body>
+<center>
+    <h3>원하는 카테고리를 선택해 주세요</h3>
+
+    <form action="/categoryResult" method="POST">
+        <div>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/109801309-a6f9e900-7c61-11eb-810a-50c919b3ab0c.png" value="푸드" id="imgoption" onclick="ClickImg()"><p>푸드</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/49145450/98111159-886a2800-1ee3-11eb-9623-333c41589c1e.png" value="온라인게임" id="imgoption" onclick="ClickImg()"><p>온라인게임</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/49145450/109805217-83856d00-7c66-11eb-9274-3547dc1ba9d9.png" value="오프라인게임" id="imgoption" onclick="ClickImg()"><p>오프라인게임</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/109801541-f4765600-7c61-11eb-9cc9-167f140af06f.png" value="출판" id="imgoption" onclick="ClickImg()"><p>출판</p></button>
+
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/49145450/98111154-8738fb00-1ee3-11eb-8922-5fd25e9d5d21.png" value="공연" id="imgoption" onclick="ClickImg()"><p>공연</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/49145450/98111162-8902be80-1ee3-11eb-8ac1-0a1337cde908.png" value="테크" id="imgoption" onclick="ClickImg()"><p>테크</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98112412-84d7a080-1ee5-11eb-885c-e972ac426f91.png" value="교육·키즈" id="imgoption" onclick="ClickImg()"><p>교육·키즈</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/49145450/109804279-6c924b00-7c65-11eb-8ce8-35d5ef828359.png" value="소셜·캠페인" id="imgoption" onclick="ClickImg()"><p>소셜·캠페인</p></button>
+        </div>
+        <br>
+        <div>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98112375-725d6700-1ee5-11eb-9a55-b4aa14f32fc6.png" value="기부·후원" id="imgoption" onclick="ClickImg()"><p>기부·후원</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98112289-4b069a00-1ee5-11eb-9b11-e8b95c927c35.png" value="스포츠·모빌리티" id="imgoption" onclick="ClickImg()"><p>스포츠·모빌리티</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98112206-29a5ae00-1ee5-11eb-9873-1a8b0a79a17d.png" value="여행·레저" id="imgoption" onclick="ClickImg()"><p>여행·레저</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98112162-0da20c80-1ee5-11eb-899d-4602e38063da.png" value="취미" id="imgoption" onclick="ClickImg()"><p>취미</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/49145450/98111156-87d19180-1ee3-11eb-91c2-f0ea41ff25d0.png" value="디자인" id="imgoption" onclick="ClickImg()"><p>디자인</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98110655-c31f9080-1ee2-11eb-85c7-f81a78e9c492.png" value="홈리빙" id="imgoption" onclick="ClickImg()"><p>홈리빙</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/49145450/98111164-899b5500-1ee3-11eb-92d2-1a05322af49d.png" value="반려동물" id="imgoption" onclick="ClickImg()"><p>반려동물</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/49145450/98111134-7e482980-1ee3-11eb-97af-1bf61f5944e8.png" value="뷰티" id="imgoption" onclick="ClickImg()"><p>뷰티</p></button>
+        </div>
+        <br>
+        <div>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/69629703/98113809-873afa00-1ee7-11eb-8b44-903fbebf4635.png" value="페스티벌" id="imgoption" onclick="ClickImg()"><p>페스티벌</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98114342-78087c00-1ee8-11eb-9a70-ccd6b6a6d25f.png" value="만화" id="imgoption" onclick="ClickImg()"><p>만화</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98114347-7939a900-1ee8-11eb-987c-f1e2eab6f359.png" value="사진" id="imgoption" onclick="ClickImg()"><p>사진</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98114343-78a11280-1ee8-11eb-98ef-c6dd0ba06da3.png" value="영화·비디오" id="imgoption" onclick="ClickImg()"><p>영화·비디오</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/48848525/98114344-7939a900-1ee8-11eb-8c05-5c213a72c6cd.png" value="음악" id="imgoption" onclick="ClickImg()"><p>음악</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/69629703/98113394-f19f6a80-1ee6-11eb-8371-21d46ef7048b.png" value="예술" id="imgoption" onclick="ClickImg()"><p>예술</p></button>
+            <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/69629703/98113679-5c50a600-1ee7-11eb-9d98-1ed4440e2439.png" value="패션·잡화" id="imgoption" onclick="ClickImg()"><p>패션·잡화</p></button>
+        </div>
+    </form>
+    <br>
+    <br>
+    <input type="submit", value="Next">
+</center>
+</body>
+</html>

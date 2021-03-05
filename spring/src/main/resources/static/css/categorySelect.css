@@ -1,0 +1,10 @@
+button.img_btn{
+    float:left;
+    column-count: inherit;
+    text-align:center;
+    margin-bottom: 20%;
+    margin-right: 10%;
+}
+#imgoption{
+    opacity: 1;
+}

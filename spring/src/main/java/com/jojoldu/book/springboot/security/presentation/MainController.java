@@ -66,4 +66,9 @@ public class MainController {
     public String getLoginForm(){
         return "index";
     }
+
+    @GetMapping("/categorySelect")
+    public String getCategorySelect(){
+        return "categorySelect";
+    }
 }
