@@ -64,6 +64,6 @@ public class MainController {
 
     @GetMapping("/login")
     public String getLoginForm(){
-        return "loginPage";
+        return "index";
     }
 }
