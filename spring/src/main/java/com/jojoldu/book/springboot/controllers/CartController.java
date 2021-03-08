@@ -11,10 +11,10 @@ import com.jojoldu.book.springboot.entities.Item;
 import com.jojoldu.book.springboot.models.ProductModel;
 
 @Controller
-@RequestMapping(value = "/cartindex")
+@RequestMapping(value = "/cart")
 public class CartController {
 
-    @RequestMapping(value = "/cartindex", method = RequestMethod.GET)
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String cartindex() {
         return "cart";
     }
@@ -37,7 +37,7 @@ public class CartController {
             }
             session.setAttribute("cart", cart);
         }
-        return "redirect:/cart";
+        return "redirect:/cart/index";
     }
 
     @RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
@@ -47,7 +47,7 @@ public class CartController {
         int index = this.exists(id, cart);
         cart.remove(index);
         session.setAttribute("cart", cart);
-        return "redirect:/cart";
+        return "redirect:/cart/index";
     }
 
     private int exists(String id, List<Item> cart) {

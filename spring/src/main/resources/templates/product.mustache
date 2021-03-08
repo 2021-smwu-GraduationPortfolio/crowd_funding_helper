@@ -15,11 +15,19 @@ pageEncoding="ISO-8859-1"%>
     <tr>
         <th>Id</th>
         <th>Name</th>
-        <th>Photo</th>
         <th>Price</th>
-        <th>Buy</th>
     </tr>
-    <!--
+
+    {{#products}}
+        <tr>
+            <td>{{id}}</td>
+            <td>{{name}}</td>
+            <td>{{price}}</td>
+        </tr>
+    {{/products}}
+
+
+            <!--
     <c:forEach var="product" items="${products }">
         <tr>
             <td>${product.id }</td>
