@@ -49,7 +49,7 @@ public class MainController {
                 .role("supporter")
                 .build();
         userRepository.save(user);
-        return "redirect:/";
+        return "redirect:/categorySelect";
     }
 
     @GetMapping("/index2")

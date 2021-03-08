@@ -1,6 +1,6 @@
 package com.jojoldu.book.springboot.web;
 
-import com.jojoldu.book.springboot.web.dto.HelloResponseDto;
+
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.springframework.stereotype.Controller;
@@ -27,11 +27,7 @@ public class HelloController {
     public String hello(){
         return "hello";
     }
-    @GetMapping("/hello/dto")
-    public HelloResponseDto helloDto(@RequestParam("name") String name,
-                                     @RequestParam("amount") int amount){
-        return new HelloResponseDto(name, amount);
-    }
+
 
     @GetMapping("/")
     public String Main(Model model){
