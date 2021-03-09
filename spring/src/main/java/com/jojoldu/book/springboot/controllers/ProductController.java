@@ -6,7 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.jojoldu.book.springboot.models.ProductModel;
@@ -25,8 +25,6 @@ public class ProductController {
         int length = products.size();
         //System.out.println(products.get(0).getId());
 
-        String completeData = "";
-        List<List<String>> sendList = null;
         JSONArray sendjson = null;
         sendjson = new JSONArray();
         JSONObject subjson = new JSONObject();
@@ -42,7 +40,7 @@ public class ProductController {
             subjson.put("price", products.get(i).getPrice());
             sendjson.add(subjson);
         }
-
+        System.out.println(sendjson);
         model.addAttribute("products",sendjson);
         return "product";
     }
