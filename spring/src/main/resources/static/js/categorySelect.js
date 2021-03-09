@@ -26,6 +26,25 @@ function ClickImg() {
         categoryArray[categoryArray.length] = clickimgvalue;
         console.log(categoryArray)
     }
+
+}
+
+function clickNext() {
+    var sendData = new XMLHttpRequest();
+    sendData.onreadystatechange = function () {
+        if (sendData.readyState == XMLHttpRequest.DONE) {
+            if (sendData.status == 200) {
+                document.body.innerText = sendData.responseText;
+            } else {
+                document.body.innerText = 'Error: ' + sendData.status;
+            }
+        }
+    };
+
+    //var data = 'This is my data';
+
+    sendData.open('POST', '/categoryResult', true);
+    sendData.send(categoryArray);
 }
 
 
