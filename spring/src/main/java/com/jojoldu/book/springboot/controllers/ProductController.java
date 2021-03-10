@@ -37,7 +37,7 @@ public class ProductController {
             subjson.put("price", products.get(i).getPrice());
             sendjson.add(subjson);
         }
-        System.out.println(sendjson);
+        //System.out.println(sendjson);
         model.addAttribute("products",sendjson);
         return "product";
     }

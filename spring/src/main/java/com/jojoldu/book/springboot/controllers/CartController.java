@@ -3,6 +3,7 @@ package com.jojoldu.book.springboot.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -22,14 +23,23 @@ public class CartController {
 
     @RequestMapping(value = "/index")
     public String cartindex() {
+        /*try {
+            TimeUnit.SECONDS.sleep(1);
+        }
+        catch(InterruptedException e){
+            System.err.format("IOException : %s%n", e);
+        }*/
+        //System.out.println("KAKAKAKA");
         return "cart";
     }
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public String buy(@RequestBody String data, HttpSession session1, HttpSession session2) {
         ProductModel productModel = new ProductModel();
+        System.out.println("data : " +data);
         Vector<String> idVector = new Vector<String>();
         int strNum = data.length();
+        System.out.println("strNum : "+strNum);
         String completeWord = "";
         for(int i = 0 ; i< strNum; i++){
             if(data.charAt(i) == ' ' || i == strNum-1){
@@ -42,9 +52,12 @@ public class CartController {
                 completeWord=completeWord+data.charAt(strNum-1);
             }
         }
-
+        JSONArray sendjson = new JSONArray();
         for(int k = 0; k < idVector.size(); k++){
             String id = idVector.elementAt(k);
+            System.out.println("id: "+id);
+            id = id.trim();
+
         if (session1.getAttribute("cart") == null) {
             System.out.println("session nope");
             List<Item> cart = new ArrayList<Item>();
@@ -53,18 +66,16 @@ public class CartController {
 
             int length = cart.size();
 
-            JSONArray sendjson = null;
-            sendjson = new JSONArray();
+
             JSONObject subjson = new JSONObject();
 
-            for(int i = 0 ; i<length; i++){
-                subjson = new JSONObject();
-                subjson.put("Id", cart.get(i).getProduct().getId());
-                subjson.put("Name", cart.get(i).getProduct().getName());
-                subjson.put("Price", cart.get(i).getProduct().getPrice());
-                sendjson.add(subjson);
-            }
-            System.out.println(sendjson);
+
+            subjson.put("Id", cart.get(k).getProduct().getId());
+            subjson.put("Name", cart.get(k).getProduct().getName());
+            subjson.put("Price", cart.get(k).getProduct().getPrice());
+            sendjson.add(subjson);
+
+            System.out.println("sendjson : "+sendjson);
             session2.setAttribute("Cart", sendjson);
 
         } else {
@@ -74,38 +85,47 @@ public class CartController {
             if (index == -1) {
                 cart.add(new Item(productModel.find(id), 1));
                 System.out.println("index : -1");
+                //이전에 장바구니에 추가한 적 없음
             } else {
                 int quantity = cart.get(index).getQuantity() + 1;
                 cart.get(index).setQuantity(quantity);
                 System.out.println("index != -1");
+                //이전에 장바구니에 추가된 적 있는 상품이라 개수만 +1
             }
-            System.out.println(cart.get(0).getProduct().getId());
+            //System.out.println(cart.get(0).getProduct().getId());
 
             int length = cart.size();
 
-            JSONArray sendjson = null;
-            sendjson = new JSONArray();
+            System.out.println("length : "+length);
+
+
+
             JSONObject subjson = new JSONObject();
 
-            for(int i = 0 ; i<length; i++){
-                subjson = new JSONObject();
-                subjson.put("Id", cart.get(i).getProduct().getId());
-                subjson.put("Name", cart.get(i).getProduct().getName());
-                subjson.put("Price", cart.get(i).getProduct().getPrice());
-                sendjson.add(subjson);
-            }
-            System.out.println(sendjson);
-            session2.setAttribute("Cart", sendjson);
+            subjson.put("Id", cart.get(k).getProduct().getId());
+            subjson.put("Name", cart.get(k).getProduct().getName());
+            subjson.put("Price", cart.get(k).getProduct().getPrice());
+            sendjson.add(subjson);
+            System.out.println("sendjson : "+sendjson);
+
             session1.setAttribute("cart", cart);
-        }}
-        return "redirect:/cart/index";
+        }
+        }
+        System.out.println("Final sendjson : "+sendjson);
+        session2.setAttribute("Cart", sendjson);
+        return "redirect:/cart/loading";
 
     }
 
+    @RequestMapping(value="/loading")
+    public String loading(){
+        return "loading";
+    }
     @RequestMapping(value="/buy1")
-    public void test(@RequestBody String data){
+    public String test(@RequestBody String data){
 
         System.out.println(data);
+        return "index";
     }
 
     @RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
