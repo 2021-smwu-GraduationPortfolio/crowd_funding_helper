@@ -2,6 +2,7 @@ package com.jojoldu.book.springboot.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -9,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.jojoldu.book.springboot.entities.Item;
@@ -18,14 +20,31 @@ import com.jojoldu.book.springboot.models.ProductModel;
 @RequestMapping(value = "/cart")
 public class CartController {
 
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    @RequestMapping(value = "/index")
     public String cartindex() {
         return "cart";
     }
 
-    @RequestMapping(value = "buy/{id}", method = RequestMethod.GET)
-    public String buy(@PathVariable("id") String id, HttpSession session1, HttpSession session2) {
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
+    public String buy(@RequestBody String data, HttpSession session1, HttpSession session2) {
         ProductModel productModel = new ProductModel();
+        Vector<String> idVector = new Vector<String>();
+        int strNum = data.length();
+        String completeWord = "";
+        for(int i = 0 ; i< strNum; i++){
+            if(data.charAt(i) == ' ' || i == strNum-1){
+                idVector.addElement(completeWord);
+                completeWord="";
+                continue;
+            }
+            completeWord = completeWord+data.charAt(i);
+            if(i==strNum-2){
+                completeWord=completeWord+data.charAt(strNum-1);
+            }
+        }
+
+        for(int k = 0; k < idVector.size(); k++){
+            String id = idVector.elementAt(k);
         if (session1.getAttribute("cart") == null) {
             System.out.println("session nope");
             List<Item> cart = new ArrayList<Item>();
@@ -78,8 +97,15 @@ public class CartController {
             System.out.println(sendjson);
             session2.setAttribute("Cart", sendjson);
             session1.setAttribute("cart", cart);
-        }
+        }}
         return "redirect:/cart/index";
+
+    }
+
+    @RequestMapping(value="/buy1")
+    public void test(@RequestBody String data){
+
+        System.out.println(data);
     }
 
     @RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
@@ -99,7 +125,6 @@ public class CartController {
             subjson.put("Id", cart.get(i).getProduct().getId());
             subjson.put("Name", cart.get(i).getProduct().getName());
             subjson.put("Price", cart.get(i).getProduct().getPrice());
-            subjson.put("quantity", cart.get(i).getQuantity());
             sendjson.add(subjson);
         }
         session2.setAttribute("Cart", sendjson);

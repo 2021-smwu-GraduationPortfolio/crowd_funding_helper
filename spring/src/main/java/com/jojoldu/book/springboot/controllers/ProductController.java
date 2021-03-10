@@ -1,16 +1,13 @@
 package com.jojoldu.book.springboot.controllers;
 
-
 import com.jojoldu.book.springboot.entities.Product;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.jojoldu.book.springboot.models.ProductModel;
-
 import java.util.List;
 
 @Controller

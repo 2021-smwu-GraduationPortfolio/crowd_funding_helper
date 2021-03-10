@@ -5,29 +5,89 @@ pageEncoding="ISO-8859-1"%>
 -->
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+    <meta http-equiv="Content-Type" content="text/html">
     <title>Product Page</title>
+    <meta charset="UTF-8">
+
+    <script type="text/javascript">
+        var result = "";
+        //var resultArray = [];
+
+        function getCheckboxValue()  {
+
+            const query = 'input[name="chk_info"]:checked';
+            const selectedEls =
+            document.querySelectorAll(query);
+
+            selectedEls.forEach((el) => {
+            result += el.id + ' ';
+            });
+
+            // 출력
+            document.getElementById('result').innerText = result;
+            //resultArray[resultArray.length] = result;
+           // resultArray = Arrays.asList(result.split(" "));
+            console.log(result)
+            // document.getElementById('resultArray').innerText = resultArray;
+        }
+
+function clickNext() {
+    var sendData = new XMLHttpRequest();
+    sendData.onreadystatechange = function () {
+        if (sendData.readyState == XMLHttpRequest.DONE) {
+            if (sendData.status == 200) {
+                document.body.innerText = sendData.responseText;
+            } else {
+                document.body.innerText = 'Error: ' + sendData.status;
+            }
+        }
+    };
+
+    //var data = 'This is my data';
+
+    sendData.open('POST', '/cart/buy', true);
+    sendData.send(result);
+}
+
+
+
+    </script>
 </head>
 <body>
 
 <h3>Products Page</h3>
-<table cellpadding="2" cellspacing="2" border="1">
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Price</th>
-    </tr>
+
+<h3>찜하려면 체크</h3>
+
+<form method="POST", action="/cart/buy">
+    <button class="save"  type="button" onClick="getCheckboxValue()">저장</button>
+    <br>
 
     {{#products}}
         <tr>
             <td>{{id}}</td>
             <td>{{name}}</td>
             <td>{{price}}</td>
+            <input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}">찜하기
+            <br>
         </tr>
     {{/products}}
+</form>
 
+<div id='result' name='result'></div>
 
-</table>
+<br>
+<button type="button" onclick="clickNext()">찜 목록 보기</button>
 
+<!--
+<div class="checkbox">
+    <c:foreach items="${list}" var="list">
+
+        <input name="chk_id" type="checkbox" value="${list" }="">${list }
+
+    </c:foreach>
+ -->
+</div>
 </body>
 </html>
