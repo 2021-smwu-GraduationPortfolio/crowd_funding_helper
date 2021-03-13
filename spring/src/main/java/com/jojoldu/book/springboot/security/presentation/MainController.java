@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Vector;
 
@@ -20,8 +21,12 @@ public class MainController {
 
     private UserEntity user;
 
-    public UserEntity getUser() {
-        return user;
+    private String id;
+    private String pw;
+
+
+    public String getId(Principal principal) {
+        return principal.getName();
     }
 
     @Autowired
@@ -49,8 +54,8 @@ public class MainController {
     @PostMapping("/signUp")
     public String signUp(Model model, HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("utf-8");
-        String id = request.getParameter("email");
-        String pw = request.getParameter("pw");
+        id = request.getParameter("email");
+        pw = request.getParameter("pw");
 
         System.out.println(id);
         System.out.println(pw);

@@ -1,5 +1,6 @@
 package com.jojoldu.book.springboot.controllers;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,11 +8,19 @@ import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpSession;
 
+import com.jojoldu.book.springboot.entities.ItemEntity;
 import com.jojoldu.book.springboot.entities.ProductEntity;
+import com.jojoldu.book.springboot.security.domain.UserEntity;
+import com.jojoldu.book.springboot.security.presentation.MainController;
+import com.jojoldu.book.springboot.service.ItemService;
 import com.jojoldu.book.springboot.service.ProductService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +36,12 @@ public class CartController {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    ItemService itemService;
+    private String email;
+
+
+
     @RequestMapping(value = "/index")
     public String cartindex() {
         /*try {
@@ -39,8 +54,12 @@ public class CartController {
         return "cart";
     }
 
+
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public String buy(@RequestBody String data, HttpSession session1, HttpSession session2) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        this.email = user.getUsername();
 
         System.out.println("data : " +data);
         Vector<String> idVector = new Vector<String>();
@@ -68,8 +87,20 @@ public class CartController {
             System.out.println("session nope");
             List<Item> cart = new ArrayList<Item>();
             Optional<ProductEntity> item = productService.findById(Long.parseLong(id));
+            Item tempItem = new Item(item.orElse(new ProductEntity("no cart", ".",".")),1);
+            cart.add(tempItem);
+            ItemEntity tempItemEntity = new ItemEntity(
+                    tempItem.getProduct().getTitle(),
+                    tempItem.getProduct().getPagename(),
+                    tempItem.getProduct().getUrl(),
+                    email);
+            System.out.println("title: "+ tempItem.getProduct().getTitle());
+            System.out.println("pagename: "+ tempItem.getProduct().getPagename());
+            System.out.println("url: "+ tempItem.getProduct().getUrl());
+            System.out.println("email: "+ email);
+            System.out.println("ItemEntity:"+tempItemEntity);
 
-            cart.add(new Item(item.orElse(new ProductEntity("카트 없나", ".",".")), 1));
+            itemService.save(tempItemEntity);
             session1.setAttribute("cart", cart);
 
             int length = cart.size();
@@ -92,11 +123,10 @@ public class CartController {
             List<Item> cart = (List<Item>) session1.getAttribute("cart");
             System.out.println("session ok");
             int index = this.exists(id, cart);
+            Optional<ProductEntity> item = productService.findById(Long.parseLong(id));
+            Item tempItem = new Item(item.orElse(new ProductEntity("no cart?", ".",".")),1);
             if (index == -1) {
-
-                Optional<ProductEntity> item = productService.findById(Long.parseLong(id));
-
-                cart.add(new Item(new ProductEntity("카트 비었나봐", ".", "."), 1));
+                cart.add(tempItem);
                 System.out.println("index : -1");
                 //이전에 장바구니에 추가한 적 없음
             } else {
@@ -107,6 +137,16 @@ public class CartController {
             }
             //System.out.println(cart.get(0).getProduct().getId());
 
+
+
+
+            ItemEntity tempItemEntity = new ItemEntity(
+                    tempItem.getProduct().getTitle(),
+                    tempItem.getProduct().getPagename(),
+                    tempItem.getProduct().getUrl(),
+                    email);
+            itemService.save(tempItemEntity);
+            session1.setAttribute("cart", cart);
             int length = cart.size();
 
             System.out.println("length : "+length);
@@ -135,12 +175,7 @@ public class CartController {
     public String loading(){
         return "loading";
     }
-    @RequestMapping(value="/buy1")
-    public String test(@RequestBody String data){
 
-        System.out.println(data);
-        return "index";
-    }
 
     @RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
     public String remove(@PathVariable("id") String id, HttpSession session1, HttpSession session2) {

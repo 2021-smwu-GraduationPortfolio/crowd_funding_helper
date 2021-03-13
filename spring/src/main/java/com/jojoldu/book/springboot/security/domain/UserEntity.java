@@ -16,6 +16,10 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long userId;
 
+    public String getName() {
+        return name;
+    }
+
     private String name;
     private String password;
 
