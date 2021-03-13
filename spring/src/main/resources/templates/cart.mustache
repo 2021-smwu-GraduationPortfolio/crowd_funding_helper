@@ -11,18 +11,16 @@
 
 <h3>Cart Page</h3>
 <table cellpadding="2" cellspacing="2" border="1">
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Price</th>
-    </tr>
+
+        Id / Name / Price
+
 
     {{#Cart}}
-        <tr>
-            <td>{{Id}}</td>
-            <td>{{Name}}</td>
-            <td>{{Price}}</td>
-        </tr>
+        <a href = {{url}}>
+            {{id}}
+            {{title}}
+            {{pagename}}
+        </a>
     {{/Cart}}
 </table>
 <br>

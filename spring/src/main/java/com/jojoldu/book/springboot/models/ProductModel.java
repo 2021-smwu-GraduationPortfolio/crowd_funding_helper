@@ -3,25 +3,31 @@ package com.jojoldu.book.springboot.models;
 import java.util.ArrayList;
 import java.util.List;
 import com.jojoldu.book.springboot.entities.Product;
+import com.jojoldu.book.springboot.entities.ProductEntity;
+import com.jojoldu.book.springboot.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
 
 public class ProductModel {
 
-    private List<Product> products;
 
-    public ProductModel() {
-        this.products = new ArrayList<Product>();
-        this.products.add(new Product("p01", "name 1", 20));
-        this.products.add(new Product("p02", "name 2", 21));
-        this.products.add(new Product("p03", "name 3", 22));
+    @Autowired
+    ProductService productService;
+
+    private List<ProductEntity> products;
+
+
+
+    public List<ProductEntity> findAll() {
+        this.products = productService.findAll();
+        System.out.println("product model find all : "+products);
+        return products;
     }
 
-    public List<Product> findAll() {
-        return this.products;
-    }
-
-    public Product find(String id) {
-        for (Product product : this.products) {
-            if (product.getId().equalsIgnoreCase(id)) {
+    public ProductEntity find(Long id) {
+        for (ProductEntity product : this.products) {
+            if (product.getId()==id) {
                 return product;
             }
         }

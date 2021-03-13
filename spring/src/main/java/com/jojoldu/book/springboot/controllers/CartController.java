@@ -2,12 +2,16 @@ package com.jojoldu.book.springboot.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpSession;
 
+import com.jojoldu.book.springboot.entities.ProductEntity;
+import com.jojoldu.book.springboot.service.ProductService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +25,8 @@ import com.jojoldu.book.springboot.models.ProductModel;
 @RequestMapping(value = "/cart")
 public class CartController {
 
+    @Autowired
+    ProductService productService;
     @RequestMapping(value = "/index")
     public String cartindex() {
         /*try {
@@ -35,7 +41,7 @@ public class CartController {
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public String buy(@RequestBody String data, HttpSession session1, HttpSession session2) {
-        ProductModel productModel = new ProductModel();
+
         System.out.println("data : " +data);
         Vector<String> idVector = new Vector<String>();
         int strNum = data.length();
@@ -61,7 +67,9 @@ public class CartController {
         if (session1.getAttribute("cart") == null) {
             System.out.println("session nope");
             List<Item> cart = new ArrayList<Item>();
-            cart.add(new Item(productModel.find(id), 1));
+            Optional<ProductEntity> item = productService.findById(Long.parseLong(id));
+
+            cart.add(new Item(item.orElse(new ProductEntity("카트 없나", ".",".")), 1));
             session1.setAttribute("cart", cart);
 
             int length = cart.size();
@@ -70,9 +78,11 @@ public class CartController {
             JSONObject subjson = new JSONObject();
 
 
-            subjson.put("Id", cart.get(k).getProduct().getId());
-            subjson.put("Name", cart.get(k).getProduct().getName());
-            subjson.put("Price", cart.get(k).getProduct().getPrice());
+            subjson.put("id", cart.get(k).getProduct().getId());
+            subjson.put("title", cart.get(k).getProduct().getTitle());
+            subjson.put("pagename", cart.get(k).getProduct().getPagename());
+            subjson.put("url", cart.get(k).getProduct().getUrl());
+
             sendjson.add(subjson);
 
             System.out.println("sendjson : "+sendjson);
@@ -83,7 +93,10 @@ public class CartController {
             System.out.println("session ok");
             int index = this.exists(id, cart);
             if (index == -1) {
-                cart.add(new Item(productModel.find(id), 1));
+
+                Optional<ProductEntity> item = productService.findById(Long.parseLong(id));
+
+                cart.add(new Item(new ProductEntity("카트 비었나봐", ".", "."), 1));
                 System.out.println("index : -1");
                 //이전에 장바구니에 추가한 적 없음
             } else {
@@ -102,9 +115,10 @@ public class CartController {
 
             JSONObject subjson = new JSONObject();
 
-            subjson.put("Id", cart.get(k).getProduct().getId());
-            subjson.put("Name", cart.get(k).getProduct().getName());
-            subjson.put("Price", cart.get(k).getProduct().getPrice());
+            subjson.put("id", cart.get(k).getProduct().getId());
+            subjson.put("title", cart.get(k).getProduct().getTitle());
+            subjson.put("pagename", cart.get(k).getProduct().getPagename());
+            subjson.put("url", cart.get(k).getProduct().getUrl());
             sendjson.add(subjson);
             System.out.println("sendjson : "+sendjson);
 
@@ -142,9 +156,10 @@ public class CartController {
 
         for(int i = 0 ; i<length; i++){
             subjson = new JSONObject();
-            subjson.put("Id", cart.get(i).getProduct().getId());
-            subjson.put("Name", cart.get(i).getProduct().getName());
-            subjson.put("Price", cart.get(i).getProduct().getPrice());
+            subjson.put("id", cart.get(i).getProduct().getId());
+            subjson.put("title", cart.get(i).getProduct().getTitle());
+            subjson.put("pagename", cart.get(i).getProduct().getPagename());
+            subjson.put("url", cart.get(i).getProduct().getUrl());
             sendjson.add(subjson);
         }
         session2.setAttribute("Cart", sendjson);
@@ -154,7 +169,7 @@ public class CartController {
 
     private int exists(String id, List<Item> cart) {
         for (int i = 0; i < cart.size(); i++) {
-            if (cart.get(i).getProduct().getId().equalsIgnoreCase(id)) {
+            if (cart.get(i).getProduct().getId()== Long.parseLong(id)) {
                 return i;
             }
         }

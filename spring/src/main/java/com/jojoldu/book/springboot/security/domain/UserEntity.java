@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user2")
+@Table(name = "user")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
@@ -18,13 +18,16 @@ public class UserEntity {
 
     private String name;
     private String password;
+
     private String role;
+
 
     @Builder
     public UserEntity(String name, String password, String role){
         this.name = name;
         this.password = password;
         this.role = role;
+
     }
 
 }

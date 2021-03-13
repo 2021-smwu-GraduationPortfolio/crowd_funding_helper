@@ -17,6 +17,13 @@ import java.util.Vector;
 
 @Controller
 public class MainController {
+
+    private UserEntity user;
+
+    public UserEntity getUser() {
+        return user;
+    }
+
     @Autowired
     private UserRepository userRepository;
 
@@ -47,7 +54,7 @@ public class MainController {
 
         System.out.println(id);
         System.out.println(pw);
-        UserEntity user = UserEntity.builder()
+        user = UserEntity.builder()
                 .name(id)
                 .password(passwordEncoder.encode(pw))
                 .role("supporter")

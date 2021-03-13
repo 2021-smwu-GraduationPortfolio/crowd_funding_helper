@@ -1,14 +1,14 @@
 package com.jojoldu.book.springboot.entities;
 
 public class Item {
-    private Product product;
+    private ProductEntity product;
     private int quantity;
 
-    public Product getProduct() {
+    public ProductEntity getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(ProductEntity product) {
         this.product = product;
     }
 
@@ -23,7 +23,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(Product product, int quantity) {
+    public Item(ProductEntity product, int quantity) {
         this.product = product;
         this.quantity = quantity;
     }
