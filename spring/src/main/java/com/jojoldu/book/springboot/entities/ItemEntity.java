@@ -41,13 +41,15 @@ public class ItemEntity {
     private String email;
     private String pagename;
     private String url;
+    private String role;
 
     @Builder
-    public ItemEntity(String title, String pagename, String url, String email){
+    public ItemEntity(String title, String pagename, String url, String email, String role){
         this.title = title;
         this.pagename = pagename;
         this.url = url;
         this.email = email;
+        this.role = role;
     }
 
 }
