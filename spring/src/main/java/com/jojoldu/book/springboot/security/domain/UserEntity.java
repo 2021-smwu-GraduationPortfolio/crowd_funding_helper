@@ -156,11 +156,11 @@ public class UserEntity {
 */
     @Builder
     public UserEntity(String name, String password, String role,
-                      Character onlinegame, Character offlinegame, Character publication, Character concert,
-                      Character tech, Character edu, Character social, Character donate, Character sports,
-                      Character travel, Character hobby, Character design, Character homeliving, Character pet,
-                      Character beauty, Character festival, Character webtoon, Character photo, Character movie,
-                      Character music, Character art, Character food, Character fashion){
+                      char onlinegame, char offlinegame, char publication, char concert,
+                      char tech, char edu, char social, char donate, char sports,
+                      char travel, char hobby, char design, char homeliving, char pet,
+                      char beauty, char festival, char webtoon, char photo, char movie,
+                      char music, char art, char food, char fashion){
         this.name = name;
         this.password = password;
         this.role = role;

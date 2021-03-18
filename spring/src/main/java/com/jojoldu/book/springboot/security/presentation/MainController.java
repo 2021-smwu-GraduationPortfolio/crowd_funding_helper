@@ -1,9 +1,12 @@
 package com.jojoldu.book.springboot.security.presentation;
 
 import com.jojoldu.book.springboot.entities.ProductEntity;
+import com.jojoldu.book.springboot.entities.ProductRepository;
 import com.jojoldu.book.springboot.security.domain.UserEntity;
 import com.jojoldu.book.springboot.security.domain.UserRepository;
 import com.jojoldu.book.springboot.service.SpringJpaService;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,15 +14,18 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Vector;
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -29,6 +35,9 @@ public class MainController {
     private SpringJpaService springJpaService;
     private String id;
     private String pw;
+
+    @Autowired
+    private ProductRepository productRepository;
 
 
     public String getId(Principal principal) {
@@ -45,14 +54,7 @@ public class MainController {
     public String singUp(){
 
         return "signUp";
-        /*UserEntity user = UserEntity.builder()
-                .name("username")
-                .password(passwordEncoder.encode("1234"))
-                .role("user")
-                .build();
-        userRepository.save(user);
-        return "redirect:/login";
-         */
+
     }
 
 
@@ -139,12 +141,14 @@ public class MainController {
     public String getCategorySelect(){
         return "categorySelect";
     }
-    @GetMapping("/categoryResult")
-    public String getCategoryResult(){return "categoryResult";}
 
-    @RequestMapping(value = "/categoryResult", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/categoryResult", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String makePostEcho(@RequestBody String data, Model model) {
+    public void makePostEcho(@RequestBody String data) {
+        ModelMap model = new ModelMap();
+
+        System.out.println("Post category result");
 
         UserEntity user;
         Vector<String> categoryVector = new Vector<String>();
@@ -162,61 +166,7 @@ public class MainController {
                 completeWord = completeWord + data.charAt(strNum-1);
             }
         }
-/*
-        Character onlinegameValue = 'N';
-        Character offlinegameValue = 'N';
-        Character publicationValue = 'N';
-        Character concertValue = 'N';
-        Character techValue = 'N';
-        Character eduValue = 'N';
-        Character socialValue = 'N';
-        Character donateValue = 'N';
-        Character sportsValue = 'N';
-        Character travelValue = 'N';
-        Character hobbyValue = 'N';
-        Character designValue = 'N';
-        Character homelivingValue = 'N';
-        Character petValue = 'N';
-        Character beautyValue = 'N';
-        Character festivalValue = 'N';
-        Character webtoonValue = 'N';
-        Character photoValue = 'N';
-        Character movieValue = 'N';
-        Character musicValue = 'N';
-        Character artValue = 'N';
-        Character foodValue = 'N';
-        Character fashionValue = 'N';
 
-        for(int i = 0; i < categoryVector.size(); i++){
-            String categoryValue = categoryVector.elementAt(i);
-            switch (categoryValue) {
-                case "onlinegame": onlinegameValue = 'Y';break;
-                case "offlinegame": offlinegameValue = 'Y';break;
-                case "publication": publicationValue = 'Y';break;
-                case "show": concertValue = 'Y';break;
-                case "tech": techValue = 'Y';break;
-                case "edu": eduValue = 'Y';break;
-                case "social": socialValue = 'Y';break;
-                case "donate": donateValue = 'Y';break;
-                case "sports": sportsValue = 'Y';break;
-                case "travel": travelValue = 'Y';break;
-                case "hobby": hobbyValue = 'Y';break;
-                case "design": designValue = 'Y';break;
-                case "homeliving": homelivingValue = 'Y';break;
-                case "pet": petValue = 'Y';break;
-                case "beauty": beautyValue = 'Y';break;
-                case "festival": festivalValue = 'Y';break;
-                case "webtoon": webtoonValue = 'Y';break;
-                case "photo": photoValue = 'Y';break;
-                case "music": musicValue = 'Y';break;
-                case "art": artValue = 'Y';break;
-                case "food": foodValue = 'Y';break;
-                case "fashion": fashionValue = 'Y';break;
-
-            }
-            //System.out.println(categoryVector.elementAt(i));
-        }
-*/
 
 
         springJpaService.updateUser(id, categoryVector);
@@ -236,7 +186,40 @@ public class MainController {
 
         //categoryVector 초기화
         //categoryVector.clear();
-        return "redirect:/categorySelect";
+
+
+    }
+
+    @RequestMapping(value="/categoryResult", method = RequestMethod.GET,produces = "text/html; charset=UTF8")
+    public String getCategoryResult(Model model){
+
+        try{
+            Thread.sleep(1050);
+        }catch(InterruptedException e){}
+
+        System.out.println("getCategory");
+        Vector<String> category = springJpaService.getCategory(id);
+        JSONArray sendjson = new JSONArray();
+
+
+        ArrayList<String[]> list = new ArrayList<String[]>();
+        int categoryNum = category.size();
+        System.out.println("categoryNum : "+ categoryNum);
+        for(int i = 0 ; i<categoryNum; i++){
+            JSONObject subjson = new JSONObject();
+            subjson.put("category", category.get(i));
+            list.add(productRepository.findTitleTop10(category.get(i)));
+            System.out.println("test : "+category.get(i));
+            System.out.println("length : "+list.get(i).length);
+            for(int j=0; j<list.get(i).length; j++) System.out.println("list  : "+list.get(i)[j]);
+            //for(int j = 0 ; j<list.indexOf(i);j++)
+            sendjson.add(subjson);
+        }
+
+
+        model.addAttribute("categories", sendjson);
+
+        return "categoryResult";
     }
 
 

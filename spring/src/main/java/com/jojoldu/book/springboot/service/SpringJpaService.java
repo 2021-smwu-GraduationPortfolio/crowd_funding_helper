@@ -19,6 +19,37 @@ public class SpringJpaService {
                 .orElseThrow(() -> new NoSuchElementException("없는 ID입니다."));
     }
 
+    public Vector<String> getCategory(String id){
+        UserEntity user = getUserOne(id);
+        Vector<String> category = new Vector<>();
+
+        if(user.getOnlinegame()=='Y') category.add("onlinegame");
+        if(user.getOfflinegame()=='Y') category.add("offlinegame");
+        if(user.getPublication()=='Y') category.add("publication");
+        if(user.getConcert()=='Y') category.add("concert");
+        if(user.getTech()=='Y') category.add("tech");
+        if(user.getEdu()=='Y') category.add("edu");
+        if(user.getSocial()=='Y') category.add("social");
+        if(user.getDonate()=='Y') category.add("donate");
+        if(user.getSports()=='Y') category.add("sports");
+        if(user.getTravel()=='Y') category.add("travel");
+        if(user.getHobby()=='Y') category.add("hobby");
+        if(user.getDesign()=='Y') category.add("design");
+        if(user.getHomeliving()=='Y') category.add("homeliving");
+        if(user.getPet()=='Y') category.add("pet");
+        if(user.getBeauty()=='Y') category.add("beauty");
+        if(user.getFestival()=='Y') category.add("festival");
+        if(user.getWebtoon()=='Y') category.add("webtoon");
+        if(user.getPhoto()=='Y') category.add("photo");
+        if(user.getMovie()=='Y') category.add("movie");
+        if(user.getMusic()=='Y') category.add("music");
+        if(user.getArt()=='Y') category.add("art");
+        if(user.getFood()=='Y') category.add("food");
+        if(user.getFashion()=='Y') category.add("fashion");
+
+        return category;
+    }
+
     public void updateUser(String id, Vector<String> categoryVector) {
         UserEntity user = getUserOne(id);
         System.out.println("update user : "+user.getName());

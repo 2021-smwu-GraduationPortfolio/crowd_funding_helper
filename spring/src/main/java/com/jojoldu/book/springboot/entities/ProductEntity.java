@@ -35,6 +35,8 @@ public class ProductEntity {
     private String title;
     private String pagename;
     private String url;
+    private String category;
+    private int achieve;
 
     @Builder
     public ProductEntity(String title, String pagename, String url){

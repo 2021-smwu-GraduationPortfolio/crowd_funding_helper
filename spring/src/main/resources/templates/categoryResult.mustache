@@ -3,12 +3,18 @@
 <html lang = "en">
 <head>
     <link rel="stylesheet" src="/css/categorySelect.css" />
+
+    <meta content="text/html">
     <meta charset="UTF-8">
-    <title>Choose Category</title>
+    <title>Category Result</title>
 
 </head>
 <body>
 <center>
+{{#categories}}
+    {{category}}
+    <br>
+{{/categories}}
 </center>
 </body>
 </html>
