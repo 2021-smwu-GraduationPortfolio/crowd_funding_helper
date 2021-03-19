@@ -1,12 +1,20 @@
 package com.jojoldu.book.springboot.web;
 
 
+import com.jojoldu.book.springboot.security.domain.UserEntity;
+import com.jojoldu.book.springboot.security.presentation.MainController;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.json.simple.JSONObject;
+import sun.applet.Main;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -14,6 +22,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.security.Principal;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +35,9 @@ import java.util.List;
 
 public class HelloController {
 
+    @Autowired
+    MainController mainController = new MainController();
+
     @GetMapping("/hello")
     public String hello(){
         return "hello";
@@ -30,8 +45,46 @@ public class HelloController {
 
 
     @GetMapping("/")
-    public String Main(Model model){
+    public String Main(Model model, Authentication authentication, Principal principal) throws SQLException {
 
+
+
+        if(principal == null){
+            System.out.println("로그인 안 함");
+            return "mainpage";
+        }
+        else{
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Connection conn;
+            conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
+            java.sql.Statement stmt = conn.createStatement();
+            System.out.println("db 연결 성공");
+
+            StringBuilder sb = new StringBuilder();
+
+            String sql = sb.append("select count(title) from test.picklist where email = '")
+                    .append(userDetails.getUsername())
+                    .append("';").toString();
+            System.out.println("찜 프로젝트 관련 sql : "+sql);
+            try{
+                ResultSet rs = stmt.executeQuery(sql);
+
+                while(rs.next()){
+                    if(rs.getString("count(title)").equals("0")) {
+                        System.out.println("찜한 프로젝트 없음");
+                        return "redirect:/categoryResult";
+                    }
+                }
+                System.out.println("찜한 프로젝트 있음");
+                return "mainpage";
+
+
+
+            }catch (SQLException e){
+                System.out.println("찜목록 확인 실패");
+                e.printStackTrace();
+            }
+        }
         return "mainpage";
     }
     @GetMapping("/supporter")

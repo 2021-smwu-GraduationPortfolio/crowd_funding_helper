@@ -23,29 +23,29 @@ public class SpringJpaService {
         UserEntity user = getUserOne(id);
         Vector<String> category = new Vector<>();
 
-        if(user.getOnlinegame()=='Y') category.add("onlinegame");
-        if(user.getOfflinegame()=='Y') category.add("offlinegame");
-        if(user.getPublication()=='Y') category.add("publication");
-        if(user.getConcert()=='Y') category.add("concert");
-        if(user.getTech()=='Y') category.add("tech");
-        if(user.getEdu()=='Y') category.add("edu");
-        if(user.getSocial()=='Y') category.add("social");
-        if(user.getDonate()=='Y') category.add("donate");
-        if(user.getSports()=='Y') category.add("sports");
-        if(user.getTravel()=='Y') category.add("travel");
-        if(user.getHobby()=='Y') category.add("hobby");
-        if(user.getDesign()=='Y') category.add("design");
-        if(user.getHomeliving()=='Y') category.add("homeliving");
-        if(user.getPet()=='Y') category.add("pet");
-        if(user.getBeauty()=='Y') category.add("beauty");
-        if(user.getFestival()=='Y') category.add("festival");
-        if(user.getWebtoon()=='Y') category.add("webtoon");
-        if(user.getPhoto()=='Y') category.add("photo");
-        if(user.getMovie()=='Y') category.add("movie");
-        if(user.getMusic()=='Y') category.add("music");
-        if(user.getArt()=='Y') category.add("art");
-        if(user.getFood()=='Y') category.add("food");
-        if(user.getFashion()=='Y') category.add("fashion");
+        if(user.getOnlinegame()=='Y') category.addElement("온라인게임");
+        if(user.getOfflinegame()=='Y') category.addElement("오프라인게임");
+        if(user.getPublication()=='Y') category.addElement("출판");
+        if(user.getConcert()=='Y') category.addElement("공연");
+        if(user.getTech()=='Y') category.addElement("테크");
+        if(user.getEdu()=='Y') category.addElement("교육·키즈");
+        if(user.getSocial()=='Y') category.addElement("소셜·캠페인");
+        if(user.getDonate()=='Y') category.addElement("기부·후원");
+        if(user.getSports()=='Y') category.addElement("스포츠·모빌리티");
+        if(user.getTravel()=='Y') category.addElement("여행·레저");
+        if(user.getHobby()=='Y') category.addElement("취미");
+        if(user.getDesign()=='Y') category.addElement("디자인");
+        if(user.getHomeliving()=='Y') category.addElement("홈리빙");
+        if(user.getPet()=='Y') category.addElement("반려동물");
+        if(user.getBeauty()=='Y') category.addElement("뷰티");
+        if(user.getFestival()=='Y') category.addElement("페스티벌");
+        if(user.getWebtoon()=='Y') category.addElement("만화");
+        if(user.getPhoto()=='Y') category.addElement("사진");
+        if(user.getMovie()=='Y') category.addElement("영화·비디오");
+        if(user.getMusic()=='Y') category.addElement("음악");
+        if(user.getArt()=='Y') category.addElement("예술");
+        if(user.getFood()=='Y') category.addElement("푸드");
+        if(user.getFashion()=='Y') category.addElement("패션");
 
         return category;
     }
@@ -56,29 +56,29 @@ public class SpringJpaService {
         for(int i = 0; i < categoryVector.size(); i++){
             String categoryValue = categoryVector.elementAt(i);
             switch (categoryValue) {
-                case "onlinegame": user.setOnlinegame('Y');break;
-                case "offlinegame": user.setOfflinegame('Y');break;
-                case "publication": user.setPublication('Y');break;
-                case "show": user.setConcert('Y');break;
-                case "tech": user.setTech('Y');break;
-                case "edu": user.setEdu('Y');break;
-                case "social": user.setSocial('Y');break;
-                case "donate": user.setDonate('Y');break;
-                case "sports": user.setSports('Y');break;
-                case "travel": user.setTravel('Y');break;
-                case "hobby": user.setHobby('Y');break;
-                case "design": user.setDesign('Y');break;
-                case "homeliving": user.setHomeliving('Y');break;
-                case "pet": user.setPet('Y');break;
-                case "beauty": user.setBeauty('Y');break;
-                case "festival": user.setFestival('Y');break;
-                case "webtoon": user.setWebtoon('Y');break;
-                case "photo": user.setPhoto('Y');break;
-                case "music": user.setMusic('Y');break;
-                case "art": user.setArt('Y');break;
-                case "food": user.setFood('Y');break;
-                case "fashion": user.setFashion('Y');break;
-
+                case "온라인게임" :  user.setOnlinegame('Y');break;
+                case "오프라인게임": user.setOfflinegame('Y');break;
+                case "출판": user.setPublication('Y');break;
+                case "테크": user.setTech('Y');break;
+                case "교육·키즈": user.setEdu('Y');break;
+                case "소셜·캠페인": user.setSocial('Y');break;
+                case "기부·후원": user.setDonate('Y');break;
+                case "스포츠·모빌리티": user.setSports('Y');break;
+                case "여행·레저": user.setTravel('Y');break;
+                case "취미": user.setHobby('Y');break;
+                case "디자인": user.setDesign('Y');break;
+                case "홈리빙": user.setHomeliving('Y');break;
+                case "반려동물": user.setPet('Y');break;
+                case "뷰티": user.setBeauty('Y');break;
+                case "페스티벌": user.setFestival('Y');break;
+                case "만화": user.setWebtoon('Y');break;
+                case "사진": user.setPhoto('Y');break;
+                case "영화·비디오": user.setMovie('Y');break;
+                case "음악": user.setMusic('Y');break;
+                case "예술": user.setArt('Y');break;
+                case "푸드": user.setFood('Y');break;
+                case "패션": user.setFashion('Y');break;
+                case "공연": user.setConcert('Y');break;
             }
             System.out.println(categoryVector.elementAt(i));
         }

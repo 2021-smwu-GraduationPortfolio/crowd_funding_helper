@@ -22,12 +22,19 @@ public class UserEntity {
 
     private String name;
     private String password;
-    public String getName() {
-        return name;
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     private String role;
-
+    public String getName() {
+        return name;
+    }
 
     private char onlinegame='N';
     private char offlinegame='N';
@@ -154,6 +161,9 @@ public class UserEntity {
 
     }
 */
+    public UserEntity(String name){
+        this.name = name;
+    }
     @Builder
     public UserEntity(String name, String password, String role,
                       char onlinegame, char offlinegame, char publication, char concert,
@@ -192,4 +202,95 @@ public class UserEntity {
 
     }
 
+    public void setOfflinegame(String category) {
+        this.offlinegame = category.charAt(0);
+    }
+
+    public void setOnlinegame(String category) {
+        this.onlinegame = category.charAt(0);
+    }
+
+    public void setPublication(String category) {
+        this.publication = category.charAt(0);
+    }
+
+    public void setConcert(String category) {
+        this.concert = category.charAt(0);
+    }
+
+    public void setTech(String category) {
+        this.tech = category.charAt(0);
+    }
+
+    public void setEdu(String category){
+        this.edu = category.charAt(0);
+    }
+
+    public void setSocial(String category) {
+        this.social = category.charAt(0);
+    }
+
+    public void setDonate(String category) {
+        this.donate = category.charAt(0);
+    }
+
+    public void setSports(String category) {
+        this.sports = category.charAt(0);
+    }
+
+    public void setTravel(String category) {
+        this.travel = category.charAt(0);
+    }
+
+    public void setHobby(String category) {
+        this.hobby = category.charAt(0);
+    }
+
+    public void setDesign(String category) {
+        this.design = category.charAt(0);
+    }
+
+    public void setHomeliving(String category) {
+        this.homeliving = category.charAt(0);
+    }
+
+    public void setPet(String category) {
+        this.pet = category.charAt(0);
+    }
+
+    public void setBeauty(String category) {
+        this.beauty = category.charAt(0);
+    }
+
+    public void setFestival(String category) {
+        this.festival = category.charAt(0);
+    }
+
+    public void setWebtoon(String category) {
+        this.webtoon = category.charAt(0);
+    }
+
+    public void setPhoto(String category) {
+        this.photo = category.charAt(0);
+    }
+
+    public void setMovie(String category) {
+        this.movie = category.charAt(0);
+    }
+
+    public void setMusic(String category) {
+        this.music = category.charAt(0);
+    }
+
+    public void setArt(String category) {
+        this.art = category.charAt(0);
+    }
+
+    public void setFood(String category) {
+        this.food = category.charAt(0);
+    }
+
+    public void setFashion(String category) {
+        this.fashion = category.charAt(0);
+    }
 }

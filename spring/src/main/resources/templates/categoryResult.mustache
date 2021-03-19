@@ -2,19 +2,73 @@
 
 <html lang = "en">
 <head>
-    <link rel="stylesheet" src="/css/categorySelect.css" />
 
-    <meta content="text/html">
+    <meta http-equiv="Content-Type" content="text/html">
     <meta charset="UTF-8">
     <title>Category Result</title>
+    <script type="text/javascript">
+        var result = "";
+        //var resultArray = [];
+        function getCheckboxValue()  {
+            const query = 'input[name="chk_info"]:checked';
+            const selectedEls =
+            document.querySelectorAll(query);
+            selectedEls.forEach((el) => {
+            result += el.id + ' ';
+            });
+            // 출력
+            document.getElementById('result').innerText = result;
+            //resultArray[resultArray.length] = result;
+           // resultArray = Arrays.asList(result.split(" "));
+            console.log(result)
+            // document.getElementById('resultArray').innerText = resultArray;
 
+            var element = document.getElementById("zzimList");
+            if(element.style.display == 'none'){
+                    element.style.display='block';
+                }
+
+
+
+        }
+function clickNext() {
+    var sendData = new XMLHttpRequest();
+    sendData.onreadystatechange = function () {
+        if (sendData.readyState == XMLHttpRequest.DONE) {
+            if (sendData.status == 200) {
+                document.body.innerText = sendData.responseText;
+            } else {
+                document.body.innerText = 'Error: ' + sendData.status;
+            }
+        }
+    };
+    //var data = 'This is my data';
+    sendData.open('POST', '/cart/buy', true);
+    sendData.send(result);
+}
+    </script>
 </head>
 <body>
+<h3 align="center">찜한 프로젝트가 없습니다</h3>
+<h3 align="center">마음에 드는 프로젝트를 선택해주세요</h3>
+<h3 align="center">찜하려면 체크</h3>
+
 <center>
-{{#categories}}
-    {{category}}
+    <form method = "post", action="/cart/buy">
+        {{#categories}}
+            <h8>{{category}} - {{id}} : <a href = {{url}}>{{title}}</a> {{pagename}}</h8>
+            <input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}">찜하기
+            <br>
+        {{/categories}}
+    </form>
     <br>
-{{/categories}}
+    <button class="save"  type="button" onClick="getCheckboxValue()">저장</button>
+    <br>
+    <div id='result' name='result'></div>
+    <button type="button" id="zzimList" style ="display:none" onclick="clickNext();self.location='/cart/loading';" >완료</button>
+
 </center>
 </body>
 </html>
+
+<html>

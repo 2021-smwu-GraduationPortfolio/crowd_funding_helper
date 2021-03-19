@@ -70,13 +70,14 @@ public class CartController {
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public String buy(@RequestBody String data, HttpSession session1, HttpSession session2) throws SQLException {
 
-        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
         java.sql.Statement stmt = conn.createStatement();
-        System.out.println("db 연결 성공");
+        //System.out.println("db 연결 성공");
 
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
+        System.out.println("Buy user : "+user);
         this.email = user.getUsername();
         this.role = "supporter";    // 수정해야함.
 
@@ -190,7 +191,7 @@ public class CartController {
         // cart.mustache(찜 목록 보여주는 페이지)에 보낼 json 작성(해당 유저가 찜한 프로젝트들 다 가져오기)
 
         StringBuilder sb = new StringBuilder();
-        String sql = sb.append("select title, pagename, url from ")
+        String sql = sb.append("select distinct title, pagename, url from ")
                 .append("test.picklist ")
                 .append("where email = '")
                 .append(email)
