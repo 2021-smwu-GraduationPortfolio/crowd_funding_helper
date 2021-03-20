@@ -44,7 +44,14 @@
             <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/69629703/98113394-f19f6a80-1ee6-11eb-8371-21d46ef7048b.png" value="예술" id="imgoption" onclick="ClickImg()"><p>예술</p></button>
             <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/69629703/98113679-5c50a600-1ee7-11eb-9d98-1ed4440e2439.png" value="패션" id="imgoption" onclick="ClickImg()"><p>패션·잡화</p></button>
         </div>
-        <input type="button" value="Next" onClick="clickNext(); self.location='/'" />
+
+        {{^sessionedUser}}
+            <input type="button" value="Next" onClick="clickNext(); self.location='/'" />
+        {{/sessionedUser}}
+        {{#sessionedUser}}
+            <input type="button" value="Next" onClick="clickNext(); self.location='/categoryResult'" />
+        {{/sessionedUser}}
+
         <!--<input type="button" value="Next" onClick="clickNext();self.location='/categoryResult';" />-->
     </form>
     <br>

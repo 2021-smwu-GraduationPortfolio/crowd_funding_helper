@@ -140,6 +140,7 @@ def getCreatorPredList(res_set, curs, conn) :
         pred.append(urll)
         pred.append(k[2])
         pred.append(k[3])
+        pred.append(k[4])
 
         if pred not in pred_list :
             pred_list.append(pred)
@@ -157,7 +158,7 @@ def getcnt(res_set):
 
 def creatortitle(category, title):
     logger.info("before connect")
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='0000',port=3307,db='test', charset='utf8')
     curs = conn.cursor()
     logger.info('title')
     logger.info(title)
@@ -193,7 +194,7 @@ def creatortitle(category, title):
     return pred
 
 def creatorkeyword(category, keyword):
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='0000',port=3307,db='test', charset='utf8')
     curs = conn.cursor()
 
     selected_word = keyword.split(' ')
@@ -312,12 +313,12 @@ def binder(client_socket, addr):
         #client_socket.close();
 
 def supporterpage(username):
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='0000',port=3307,db='test', charset='utf8')
     curs = conn.cursor()
 
     logger.info("supporterpage 안")
 
-    sql = "select distinct trim(I.title) from test.user_info I, test.crawl C where username = '%s' and C.title = I.title;"%username
+    sql = "select distinct trim(I.title) from test.picklist I, test.crawl C where email = '%s' and C.title = I.title;"%username
     curs.execute(sql)
     sent = curs.fetchall()
     logger.info("sent")
@@ -344,7 +345,7 @@ def supporterpage(username):
 
 #final_word_list : selected words
     for i in selected_word:
-        sql3 = "select distinct I.title, C.category from test.user_info I, test.crawl C where username like '{username}' and C.title = I.title and I.title like '%%{word}%%';".format(username=username, word=i);
+        sql3 = "select distinct I.title, C.category from test.picklist I, test.crawl C where email like '{username}' and C.title = I.title and I.title like '%%{word}%%';".format(username=username, word=i);
         curs.execute(sql3)
         rows = curs.fetchall()
 
@@ -395,6 +396,7 @@ def supporterpage(username):
             pred.append(k[1])
             pred.append(k[2])
             pred.append(urll)
+            pred.append(k[3])
             if pred not in pred_list :
                 pred_list.append(pred)
 

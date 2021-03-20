@@ -61,7 +61,7 @@ public class HelloController {
         else{
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Connection conn;
-            conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
+            conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3307/test?useSSL=false&serverTimezone=UTC", "root", "Pami1227!*");
             java.sql.Statement stmt = conn.createStatement();
             System.out.println("db 연결 성공");
 
@@ -104,11 +104,17 @@ public class HelloController {
 
 
 
-    @PostMapping(value = "/supporterpage")
-    public String SupporterPage(Model model, HttpServletRequest request) throws UnsupportedEncodingException {
+    @GetMapping(value = "/supporterpage")
+    public String SupporterPage(Principal principal, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("utf-8");
 
-        String username = request.getParameter("a");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        String username = user.getUsername();
+        //String username = request.getParameter("a");
+        //String username = userEmail;
+
         System.out.println("origin username : " + username);
         //username = new String(username.getBytes("8859_1"),"utf-8");
         String res = "failed";
@@ -173,7 +179,7 @@ public class HelloController {
                         subjson = new JSONObject();
                         continue;
                     } else if (res.charAt(i) == ']') {
-                        subjson.put("url", completeData);
+                        subjson.put("id", completeData);
                         sendjson.add(subjson);
                         if (res.charAt(i+1) == ']') break;
                         continue;
@@ -185,6 +191,7 @@ public class HelloController {
                             subjson.put("category", completeData);
                         }
                         else if (variableNum == 1) subjson.put("title", completeData);
+                        else if(variableNum == 2) subjson.put("url", completeData);
                         variableNum += 1;
                         completeData = "";
                         continue;
@@ -276,7 +283,7 @@ public class HelloController {
                         subjson = new JSONObject();
                         continue;
                     } else if (res.charAt(i) == ']') {
-                        subjson.put("goal", completeData);
+                        subjson.put("id", completeData);
                         sendjson.add(subjson);
                         if (res.charAt(i+1) == ']') break;
                         continue;
@@ -296,6 +303,7 @@ public class HelloController {
                         else if (variableNum == 1) subjson.put("content", completeData);
                         else if (variableNum == 2) subjson.put("url", completeData);
                         else if (variableNum == 3) subjson.put("achieve", completeData);
+                        else if(variableNum == 4) subjson.put("goal", completeData);
                         variableNum += 1;
                         completeData = "";
                         continue;
@@ -389,7 +397,7 @@ public class HelloController {
                         subjson = new JSONObject();
                         continue;
                     } else if (res.charAt(i) == ']') {
-                        subjson.put("goal", completeData);
+                        subjson.put("id", completeData);
                         sendjson.add(subjson);
                         if (res.charAt(i+1) == ']') break;
                         continue;
@@ -399,27 +407,22 @@ public class HelloController {
                         i += 1;
                         if (variableNum == 0) {
                             subjson.put("pagename", completeData);
-                            if(completeData.equals("tumblbug")){
+                            if (completeData.equals("tumblbug")){
                                 t_cnt = t_cnt + 1;
-                            }
-                            else if(completeData.equals("wadiz")){
+
+                            } else if (completeData.equals("wadiz")) {
                                 w_cnt = w_cnt + 1;
                             }
-
                         }
-                        else if (variableNum == 1) {
-                            subjson.put("content", completeData);
-                            System.out.println(completeData);
-                        }
+                        else if (variableNum == 1) subjson.put("content", completeData);
                         else if (variableNum == 2) subjson.put("url", completeData);
                         else if (variableNum == 3) subjson.put("achieve", completeData);
+                        else if(variableNum == 4) subjson.put("goal", completeData);
                         variableNum += 1;
                         completeData = "";
                         continue;
                     }
-
                     completeData = completeData + res.charAt(i);
-
                 }
 // 콘솔에 출력한다.
                 System.out.println(res);
@@ -451,7 +454,7 @@ public class HelloController {
         User user = (User) authentication.getPrincipal();
         this.email = user.getUsername();
 
-        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3307/test?useSSL=false&serverTimezone=UTC", "root", "Pami1227!*");
         java.sql.Statement stmt = conn.createStatement();
         System.out.println("db 연결 성공");
 

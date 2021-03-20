@@ -3,23 +3,31 @@
 <body bgcolor=#a3cfb4>
 
 <center>
-
+    <script src="/js/creatorpage.js" ></script>
     <h1>  PREDICTION :  </h1>
-    {{#test1}}
+    <form method="POST", action="/cart/buy">
+        {{#test1}}
 
-        <p>{{pagename}}&nbsp;&nbsp;<a href={{ url }}>{{ content }}</a></p>
-        <h3>goal : {{goal}} &nbsp;&nbsp;&nbsp;achieve : {{ achieve }}% <br></h3>
-        <br>
-    {{/test1}}
-
+            <p>{{pagename}}&nbsp;&nbsp;<a href={{ url }}>{{ content }}</a></p>
+            <h3>goal : {{goal}} &nbsp;&nbsp;&nbsp;achieve : {{ achieve }}% <br></h3>
+            <input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}">찜하기
+            <br>
+        {{/test1}}
+    </form>
     <h2> wadiz : {{w_cnt}}<br>tumblbug : {{t_cnt}}</h2>
     <!--    -->
     <br><br>
+    <br>
+    <button class="save"  type="button" style="background-color:salmon" onClick="getCheckboxValue()">저장</button>
+    <br>
+    <div id='result' name='result'></div>
+    <br>
+    <button type="button" id="zzimList" style ="display:none" onclick="clickNext();self.location='/cart/loading';" >찜 목록 보기</button>
     <a href='/'>go back to home page</a>
     <br>
     <a href='/creator'>go back to creatorpage</a>
     <br>
-    <a href='/supporter'>go back to supporterpage</a>
+    <a href='/supporterpage'>go back to supporterpage</a>
 </center>
 
 </body>
