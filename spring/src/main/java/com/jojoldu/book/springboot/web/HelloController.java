@@ -6,6 +6,7 @@ import com.jojoldu.book.springboot.security.presentation.MainController;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -35,6 +36,10 @@ import java.util.List;
 
 public class HelloController {
 
+    Connection conn;
+    private String email;
+    private JdbcTemplate jdbc;
+
     @Autowired
     MainController mainController = new MainController();
 
@@ -56,7 +61,7 @@ public class HelloController {
         else{
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Connection conn;
-            conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
+            conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
             java.sql.Statement stmt = conn.createStatement();
             System.out.println("db 연결 성공");
 
@@ -432,4 +437,80 @@ public class HelloController {
         return "creatorpage";
 
     }
+
+    @RequestMapping(value = "/picklistModeSelect")
+    public String picklistModeSelect(Model model){
+
+        return "picklistModeSelect";
+    }
+
+    @PostMapping(value = "/picklistResult")
+    public String picklistResult(@RequestBody String mode, Model model) throws SQLException {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        this.email = user.getUsername();
+
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
+        java.sql.Statement stmt = conn.createStatement();
+        System.out.println("db 연결 성공");
+
+        // System.out.println("mode : " + mode);   // supporter=%ED%9B%84%EC%9B%90%EC%9E%90
+
+        String role = mode.substring(0, mode.indexOf('='));  // =이후 잘라내고 mode 저장
+        System.out.println("mode : " + role);
+
+        StringBuilder sb = new StringBuilder();
+        String sql;
+        if (role.equals("supporter") || role.equals("creator")) {
+            sql = sb.append("select distinct title, pagename, url from ")
+                    .append("test.picklist ")
+                    .append("where email = '")
+                    .append(email)
+                    .append("' ")
+                    .append("and role = '")
+                    .append(role)
+                    .append("';").toString();
+        } else {
+            System.out.println("전체보기 선택");
+            sql = sb.append("select distinct title, pagename, url from ")
+                    .append("test.picklist ")
+                    .append("where email = '")
+                    .append(email)
+                    .append("';").toString();
+        }
+
+        System.out.println(sql);
+
+        JSONArray sendtohtml = new JSONArray();
+
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                JSONObject subtohtml = new JSONObject();
+                //System.out.print(rs.getString("title"));
+                subtohtml.put("title", rs.getString("title"));
+                //System.out.print(rs.getString("pagename"));
+                subtohtml.put("pagename", rs.getString("pagename"));
+                //System.out.print(rs.getString("url"));
+                subtohtml.put("url", rs.getString("url"));
+                //System.out.println("subtohtml : " + subtohtml);
+                sendtohtml.add(subtohtml);
+                //System.out.println("sendtohtml : " + sendtohtml);
+
+            }
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            System.out.println("html에 보낼 json 넣는데 오류");
+            e.printStackTrace();
+        }
+
+        model.addAttribute("role", role);
+        model.addAttribute("picklist", sendtohtml);
+        System.out.println("email : " + email + ", role : " + role + " 일때 picklist : " + sendtohtml);
+        return "picklistResult";
+    }
+
 }

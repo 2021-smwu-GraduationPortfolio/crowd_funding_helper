@@ -208,7 +208,7 @@ public class MainController {
             Thread.sleep(2000);
         }catch(InterruptedException e){}
 
-        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
         java.sql.Statement stmt = conn.createStatement();
         System.out.println("db 연결 성공");
 
