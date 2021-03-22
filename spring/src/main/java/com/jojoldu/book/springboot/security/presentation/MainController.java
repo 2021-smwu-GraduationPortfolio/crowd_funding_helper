@@ -158,8 +158,9 @@ public class MainController {
         ModelMap model = new ModelMap();
         Vector<String> categoryVector = new Vector<String>();
         System.out.println("Post category result");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User userDetails = (User)principal;
 
-        UserEntity user;
 
         System.out.println("data: " + data);
         int strNum = data.length();
@@ -179,7 +180,39 @@ public class MainController {
 
 
 
-        springJpaService.updateUser(id, categoryVector);
+
+        UserEntity user = new UserEntity(((User) principal).getUsername());
+        System.out.println("update user : "+user.getName());
+        for(int i = 0; i < categoryVector.size(); i++){
+            String categoryValue = categoryVector.elementAt(i);
+            switch (categoryValue) {
+                case "온라인게임" :  user.setOnlinegame('Y');break;
+                case "오프라인게임": user.setOfflinegame('Y');break;
+                case "출판": user.setPublication('Y');break;
+                case "테크": user.setTech('Y');break;
+                case "교육·키즈": user.setEdu('Y');break;
+                case "소셜·캠페인": user.setSocial('Y');break;
+                case "기부·후원": user.setDonate('Y');break;
+                case "스포츠·모빌리티": user.setSports('Y');break;
+                case "여행·레저": user.setTravel('Y');break;
+                case "취미": user.setHobby('Y');break;
+                case "디자인": user.setDesign('Y');break;
+                case "홈리빙": user.setHomeliving('Y');break;
+                case "반려동물": user.setPet('Y');break;
+                case "뷰티": user.setBeauty('Y');break;
+                case "페스티벌": user.setFestival('Y');break;
+                case "만화": user.setWebtoon('Y');break;
+                case "사진": user.setPhoto('Y');break;
+                case "영화·비디오": user.setMovie('Y');break;
+                case "음악": user.setMusic('Y');break;
+                case "예술": user.setArt('Y');break;
+                case "푸드": user.setFood('Y');break;
+                case "패션": user.setFashion('Y');break;
+                case "공연": user.setConcert('Y');break;
+            }
+            System.out.println(categoryVector.elementAt(i));
+        }
+        userRepository.save(user);
         return "redirect:/";
 
         // userdb 내용 읽어오기 0
