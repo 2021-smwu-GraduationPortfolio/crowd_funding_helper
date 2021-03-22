@@ -1,23 +1,35 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <center>
-        <title>supporter 결과값 출력</title>
+        <script src="/js/supporterpage.js" ></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<center>
+        <title>supporter 결과값 출력</title>
 
+    <a href='/categorySelect'>다른 카테고리 선택하기</a>
+
+        <form method="POST", action="/cart/buy">
             {{#test1}}
                 <span>{{category}}</span>
-                <h4 style><a href = {{url}}>{{title}}</a></h4>
+                <h4 style><a href = {{url}}>{{title}}</a>
+                </h4>
+                {{id}}<input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}">찜하기
             {{/test1}}
-
-        <br><br>
+        </form>
+        <br>
+        <br>
+        <button class="save" type="button" style="background-color:salmon" onClick="getCheckboxValue()">저장</button>
+        <br>
+        <br>
+        <button type="button" id="zzimList" style ="display:none" onclick="clickNext();self.location='/cart/loading';" >찜 목록 보기</button>
+        <br>
         <a href='/'>go back to home page</a>
         <br>
         <a href='/creator'>go back to creator</a>
         <br>
         <a href='/supporter'>go back to supporter</a>
     </center>
-</head>
 <body>
 
  <!-- 파라미터를 이런식으로 입력 -->

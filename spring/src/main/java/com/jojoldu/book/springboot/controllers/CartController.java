@@ -70,7 +70,7 @@ public class CartController {
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public String buy(@RequestBody String data, HttpSession session1, HttpSession session2) throws SQLException {
 
-        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3307/test?useSSL=false&serverTimezone=UTC", "root", "Pami1227!*");
         java.sql.Statement stmt = conn.createStatement();
         //System.out.println("db 연결 성공");
 
@@ -79,25 +79,30 @@ public class CartController {
         User user = (User) authentication.getPrincipal();
         System.out.println("Buy user : "+user);
         this.email = user.getUsername();
-        this.role = "supporter";    // 수정해야함.
-
-
         System.out.println("data : " +data);
         Vector<String> idVector = new Vector<String>();
         int strNum = data.length();
         System.out.println("strNum : "+strNum);
         String completeWord = "";
         for(int i = 0 ; i< strNum; i++){
-            if(data.charAt(i) == ' ' || i == strNum-1){
+            if(data.charAt(i) == ' '){
                 idVector.addElement(completeWord);
                 completeWord="";
                 continue;
             }
-            completeWord = completeWord+data.charAt(i);
-            if(i==strNum-2){
-                completeWord=completeWord+data.charAt(strNum-1);
+            else if(data.charAt(i) == 'c') {
+                this.role = "creator";
+                continue;
             }
+            else if(data.charAt(i) == 's') {
+                this.role = "supporter";
+                continue;
+            }
+            else if(data.charAt(i) == 'p') continue;
+            completeWord = completeWord+data.charAt(i);
         }
+
+        System.out.println("role : "+this.role);
         JSONArray sendjson = new JSONArray();
         for(int k = 0; k < idVector.size(); k++){
             String id = idVector.elementAt(k);
