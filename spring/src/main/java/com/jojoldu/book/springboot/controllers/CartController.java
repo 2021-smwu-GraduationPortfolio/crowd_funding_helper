@@ -70,7 +70,7 @@ public class CartController {
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
     public String buy(@RequestBody String data, HttpSession session1, HttpSession session2) throws SQLException {
 
-        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3307/test?useSSL=false&serverTimezone=UTC", "root", "Pami1227!*");
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
         java.sql.Statement stmt = conn.createStatement();
         //System.out.println("db 연결 성공");
 

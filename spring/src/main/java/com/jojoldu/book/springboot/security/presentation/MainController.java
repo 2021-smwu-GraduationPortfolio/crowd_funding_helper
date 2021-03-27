@@ -152,23 +152,18 @@ public class MainController {
     }
 
 
-    @RequestMapping(value = "/categoryResult", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/categoryResult", method = RequestMethod.POST)
     @ResponseBody
-    public String makePostEcho(@RequestBody String data) {
-        ModelMap model = new ModelMap();
+    public String makePostEcho(@RequestBody String data, Model model) {
+
+        UserEntity user;
         Vector<String> categoryVector = new Vector<String>();
-        System.out.println("Post category result");
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User userDetails = (User)principal;
-
-
         System.out.println("data: " + data);
         int strNum = data.length();
         String completeWord = "";
         for(int i = 0; i < strNum; i++){
             if(data.charAt(i) == ',' || i == strNum-1){
                 categoryVector.addElement(completeWord);
-
                 completeWord = "";
                 continue;
             }
@@ -177,43 +172,65 @@ public class MainController {
                 completeWord = completeWord + data.charAt(strNum-1);
             }
         }
-
-
-
-
-        UserEntity user = new UserEntity(((User) principal).getUsername());
-        System.out.println("update user : "+user.getName());
+/*
+        Character onlinegameValue = 'N';
+        Character offlinegameValue = 'N';
+        Character publicationValue = 'N';
+        Character concertValue = 'N';
+        Character techValue = 'N';
+        Character eduValue = 'N';
+        Character socialValue = 'N';
+        Character donateValue = 'N';
+        Character sportsValue = 'N';
+        Character travelValue = 'N';
+        Character hobbyValue = 'N';
+        Character designValue = 'N';
+        Character homelivingValue = 'N';
+        Character petValue = 'N';
+        Character beautyValue = 'N';
+        Character festivalValue = 'N';
+        Character webtoonValue = 'N';
+        Character photoValue = 'N';
+        Character movieValue = 'N';
+        Character musicValue = 'N';
+        Character artValue = 'N';
+        Character foodValue = 'N';
+        Character fashionValue = 'N';
         for(int i = 0; i < categoryVector.size(); i++){
-            String categoryValue = categoryVector.elementAt(i);
+             String categoryValue = categoryVector.elementAt(i);
             switch (categoryValue) {
-                case "온라인게임" :  user.setOnlinegame('Y');break;
-                case "오프라인게임": user.setOfflinegame('Y');break;
-                case "출판": user.setPublication('Y');break;
-                case "테크": user.setTech('Y');break;
-                case "교육·키즈": user.setEdu('Y');break;
-                case "소셜·캠페인": user.setSocial('Y');break;
-                case "기부·후원": user.setDonate('Y');break;
-                case "스포츠·모빌리티": user.setSports('Y');break;
-                case "여행·레저": user.setTravel('Y');break;
-                case "취미": user.setHobby('Y');break;
-                case "디자인": user.setDesign('Y');break;
-                case "홈리빙": user.setHomeliving('Y');break;
-                case "반려동물": user.setPet('Y');break;
-                case "뷰티": user.setBeauty('Y');break;
-                case "페스티벌": user.setFestival('Y');break;
-                case "만화": user.setWebtoon('Y');break;
-                case "사진": user.setPhoto('Y');break;
-                case "영화·비디오": user.setMovie('Y');break;
-                case "음악": user.setMusic('Y');break;
-                case "예술": user.setArt('Y');break;
-                case "푸드": user.setFood('Y');break;
-                case "패션": user.setFashion('Y');break;
-                case "공연": user.setConcert('Y');break;
+                case "onlinegame": onlinegameValue = 'Y';break;
+                case "offlinegame": offlinegameValue = 'Y';break;
+                case "publication": publicationValue = 'Y';break;
+                case "show": concertValue = 'Y';break;
+                case "tech": techValue = 'Y';break;
+                case "edu": eduValue = 'Y';break;
+                case "social": socialValue = 'Y';break;
+                case "donate": donateValue = 'Y';break;
+                case "sports": sportsValue = 'Y';break;
+                case "travel": travelValue = 'Y';break;
+                case "hobby": hobbyValue = 'Y';break;
+                case "design": designValue = 'Y';break;
+                case "homeliving": homelivingValue = 'Y';break;
+                case "pet": petValue = 'Y';break;
+                case "beauty": beautyValue = 'Y';break;
+                case "festival": festivalValue = 'Y';break;
+                case "webtoon": webtoonValue = 'Y';break;
+                case "photo": photoValue = 'Y';break;
+                case "music": musicValue = 'Y';break;
+                case "art": artValue = 'Y';break;
+                case "food": foodValue = 'Y';break;
+                case "fashion": fashionValue = 'Y';break;
             }
-            System.out.println(categoryVector.elementAt(i));
+            //System.out.println(categoryVector.elementAt(i));
         }
-        userRepository.save(user);
-        return "redirect:/";
+        //product에서 적합한 프로젝트들 가져와서 json으로 다시 만들기...
+        //userdb에 카테고리 categoryVector 내용 옮기기
+*/
+
+
+        springJpaService.updateUser(id, categoryVector);
+
 
         // userdb 내용 읽어오기 0
         // userdb 내용 수정하기 0
@@ -228,8 +245,10 @@ public class MainController {
         // model에 데이터 붙인 뒤 categoryResult에 뿌리기기
 
         //categoryVector 초기화
+        //return data + "hello";
+        //
         //categoryVector.clear();
-
+        return "redirect:/categorySelect";
 
     }
 
@@ -238,10 +257,10 @@ public class MainController {
 
         Connection conn;
         try{
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         }catch(InterruptedException e){}
 
-        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3307/test?useSSL=false&serverTimezone=UTC", "root", "Pami1227!*");
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
         java.sql.Statement stmt = conn.createStatement();
         System.out.println("db 연결 성공");
 
