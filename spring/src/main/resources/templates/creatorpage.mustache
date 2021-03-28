@@ -1,33 +1,47 @@
 <html>
 
-<body bgcolor=#a3cfb4>
 
 <center>
     <script src="/js/creatorpage.js" ></script>
-    <h1>  PREDICTION :  </h1>
-    <form method="POST", action="/cart/buy">
-        {{#test1}}
+    <h1>여기는 창작자 페이지입니다</h1>
+    <br>
+    <h3>관심있는 프로젝트에 좋아요를 눌러보세요!</h3>
+    <br><br>
 
-            <p>{{pagename}}&nbsp;&nbsp;<a href={{ url }}>{{ content }}</a></p>
-            <h3>goal : {{goal}} &nbsp;&nbsp;&nbsp;achieve : {{ achieve }}% <br></h3>
-            <input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}">찜하기
-            <br>
-        {{/test1}}
+    <form method="POST", action="/cart/buy">
+        <table border="1" bordercolor="black" align="center" height="100px">
+            <th bgcolor="#e3f2fd">사이트명</th>
+            <th bgcolor="#e3f2fd">제목</th>
+            <th bgcolor="#e3f2fd">펀딩 목표 금액</th>
+            <th bgcolor="#e3f2fd">펀딩 달성률</th>
+            <th bgcolor="#e3f2fd">좋아요</th>
+            {{#test1}}
+                <tr>
+                    <td align="center">{{pagename}}</td>&nbsp
+                    <td><a href={{ url }}>{{ content }}</a></td>
+                    <td align="center">{{goal}}원</td>
+                    <td align="center">{{ achieve }}%</td>
+                    <td align="center"><input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}"></td>
+
+                </tr>
+            {{/test1}}
+        </table>
     </form>
-    <h2> wadiz : {{w_cnt}}<br>tumblbug : {{t_cnt}}</h2>
+    <br>
+    <h3> wadiz에서 추천된 프로젝트 개수 : {{w_cnt}}개<br>tumblbug에서 추천된 프로젝트 개수 : {{t_cnt}}개</h3>
     <!--    -->
     <br><br>
     <br>
-    <button class="save"  type="button" style="background-color:salmon" onClick="getCheckboxValue()">저장</button>
+
+    <button type="button" style="background-color:white; width: 100px; font-size: large; height: 30px;" onClick="getCheckboxValue()">저장</button>
     <br>
-    <div id='result' name='result'></div>
     <br>
-    <button type="button" id="zzimList" style ="display:none" onclick="clickNext();self.location='/cart/loading';" >찜 목록 보기</button>
-    <a href='/'>go back to home page</a>
+    <button type="button" id="zzimList" style="display:none; background-color:white; width: 200px; font-size: large; height: 30px;" onclick="clickNext();self.location='/cart/loading';" >관심 프로젝트 모음</button>
     <br>
-    <a href='/creator'>go back to creatorpage</a>
-    <br>
-    <a href='/supporterpage'>go back to supporterpage</a>
+    <input type="button"  value="홈으로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='/';" />
+    <input type="button"  value="창작자 페이지로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='creator';" />
+    <input type="button"  value="후원자 페이지로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='supporterpage';" />
+
 </center>
 
 </body>

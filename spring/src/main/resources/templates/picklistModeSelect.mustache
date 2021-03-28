@@ -11,20 +11,33 @@
 <body>
 
 <center>
-    <h1> MY PICKLIST </h1><br>
+    <h1>관심 프로젝트 모음</h1>
+    <br>
 
+
+    <div style="border: 0.3px solid #1b1e21;width:810px">
+
+        <Text style="font-size: 1em;">
+            <br>'후원자'를 클릭하면 후원자 페이지에서 '좋아요' 체크한 프로젝트가 나타납니다.<br>
+            '창작자'를 클릭하면 창작자 페이지에서 '좋아요' 체크한 프로젝트가 나타납니다.<br>
+            '전체보기'를 클릭하면 후원자 페이지와 창작자 페이지에서 '좋아요' 체크한 프로젝트가 모두 나타납니다.
+            <br></Text>
+        <br>
+    </div>
+    <br><br><br>
     <form method="POST", action="/picklistResult">
-        <input type="submit" name = "supporter" value="후원자" />
-        <input type="submit" name = "creator" value="창작자"/>
-        <input type="submit" name = "all" value="전체보기" />
+
+        <input type="submit" name = "supporter" value="후원자" style="width: 100px; font-size: large;  height: 30px; background-color: white" />
+        <input type="submit" name = "creator" value="창작자" style="width: 100px; font-size: large;  height: 30px; background-color: white" />
+        <input type="submit" name = "all" value="전체보기" style="width: 100px; font-size: large; height: 30px; background-color: white" />
+
+
     </form>
 
-    <br><br>
-    <a href='/'>go back to home page</a>
-    <br>
-    <a href='/creator'>go back to creator</a>
-    <br>
-    <a href='/supporterpage'>go back to supporter</a>
+    <br><br><br>
+    <input type="button"  value="홈으로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='/';" />
+    <input type="button"  value="창작자 페이지로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='creator';" />
+    <input type="button"  value="후원자 페이지로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='supporterpage';" />
 
 </center>
 </body>

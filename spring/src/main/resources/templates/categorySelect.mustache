@@ -45,11 +45,10 @@
             <button type="button" class="btm_image"><img src="https://user-images.githubusercontent.com/69629703/98113679-5c50a600-1ee7-11eb-9d98-1ed4440e2439.png" value="패션" id="imgoption" onclick="ClickImg()"><p>패션·잡화</p></button>
         </div>
 
-        {{^sessionedUser}}
-            <input type="button" value="Next" onClick="clickNext(); self.location='/'" />
-        {{/sessionedUser}}
+
+        <br><br>
         {{#sessionedUser}}
-            <input type="button" value="Next" onClick="clickNext(); self.location='/categoryResult'" />
+            <input type="button" value="선택" style="width: 100px; font-size: large; height: 30px; background-color: white" onClick="clickNext(); self.location='/loading'" />
         {{/sessionedUser}}
 
         <!--<input type="button" value="Next" onClick="clickNext();self.location='/categoryResult';" />-->

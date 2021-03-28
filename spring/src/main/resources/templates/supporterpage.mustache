@@ -1,33 +1,44 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-        <script src="/js/supporterpage.js" ></script>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="/js/supporterpage.js" ></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <center>
-        <title>supporter 결과값 출력</title>
+    <title>후원자 페이지</title>
 
-    <a href='/categorySelect'>다른 카테고리 선택하기</a>
-
-        <form method="POST", action="/cart/buy">
+    <!--    <a href='/categorySelect'>다른 카테고리 선택하기</a>-->
+    <br>
+    <br>
+    <form method="POST", action="/cart/buy">
+        <h1 align="center">여기는 후원자 페이지입니다</h1>
+        <br>
+        <h4>아래 추천 프로젝트의 카테고리가 마음에 들지 않을 경우, 다른 카테고리 선택하기 버튼을 눌러 카테고리와 프로젝트를 선택해 주세요</h4>
+        <br>
+        <h3 align="center">추천 프로젝트</h3>
+        <table border="1" bordercolor="black" align="center" height="300">
+            <th bgcolor="#e3f2fd">카테고리</th>
+            <th bgcolor="#e3f2fd">제목</th>
+            <th bgcolor="#e3f2fd">좋아요</th>
             {{#test1}}
-                <span>{{category}}</span>
-                <h4 style><a href = {{url}}>{{title}}</a>
-                </h4>
-                {{id}}<input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}">찜하기
+            <tr>
+                <td align="center">{{category}}</td>
+                <td><a href = {{url}}>{{title}}</a></td>
+                <td align="center"><input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}"></td>
             {{/test1}}
-        </form>
-        <br>
-        <br>
-        <button class="save" type="button" style="background-color:salmon" onClick="getCheckboxValue()">저장</button>
-        <br>
-        <br>
-        <button type="button" id="zzimList" style ="display:none" onclick="clickNext();self.location='/cart/loading';" >찜 목록 보기</button>
-        <br>
-        <a href='/'>go back to home page</a>
-        <br>
-        <a href='/creator'>go back to creator</a>
-        <br>
-        <a href='/supporter'>go back to supporter</a>
-    </center>
+        </tr>
+        </table>
+    </form>
+    <br>
+    <br>
+    <button type="button" style="background-color:white; width: 100px; font-size: large; height: 30px;" onClick="getCheckboxValue()">저장</button>
+    <br>
+    <br>
+    <button type="button" id="zzimList" style="display:none; background-color:white; width: 180px; font-size: large; height: 30px;" onclick="clickNext();self.location='/cart/loading';" >관심 프로젝트 모음</button>
+    <br>
+    <br>
+    <input type="button"  value="다른 카테고리 선택하기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;background-color: white" onClick="self.location='categorySelect';" />
+    <input type="button"  value="홈으로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='/';" />
+    <input type="button"  value="창작자 페이지로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='creator';" />
+</center>
 <body>

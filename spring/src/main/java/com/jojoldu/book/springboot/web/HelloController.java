@@ -61,7 +61,7 @@ public class HelloController {
         else{
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Connection conn;
-            conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
+            conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
             java.sql.Statement stmt = conn.createStatement();
             System.out.println("db 연결 성공");
 
@@ -454,7 +454,7 @@ public class HelloController {
         User user = (User) authentication.getPrincipal();
         this.email = user.getUsername();
 
-        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
         java.sql.Statement stmt = conn.createStatement();
         System.out.println("db 연결 성공");
 

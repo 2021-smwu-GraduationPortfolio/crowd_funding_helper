@@ -9,28 +9,28 @@
 <body>
 
 <center>
-    <h1> MY PICKLIST </h1>
+    <br>
+    <h1>관심 프로젝트 모음</h1>
+    <br>
+    <br>
+    <table border="1" bordercolor="black" align="center" height="100px">
+        <th bgcolor="#e3f2fd">제목</th>
+        <th bgcolor="#e3f2fd">사이트명</th>
 
-    <table cellpadding="2" cellspacing="2" border="1">
-
-            title / pagename
-            <br>
-            {{#picklist}}
-                <a href = {{url}}>
-                    {{title}}
-                    {{pagename}}
-                </a>
-                <br>
-            {{/picklist}}
+        {{#picklist}}
+            <tr>
+                <td ><a href = {{url}}>{{title}}</a></td>
+                <td align="center">{{pagename}}</td>
+            </tr>
+        {{/picklist}}
 
     </table>
-    <br>
-    <br><br>
-    <a href='/'>go back to home page</a>
-    <br>
-    <a href='/creator'>go back to creator</a>
-    <br>
-    <a href='/supporterpage'>go back to supporter</a>
+
+    <br><br><br>
+    <input type="button"  value="홈으로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='/';" />
+    <input type="button"  value="뒤로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='/picklistModeSelect';" />
+    <input type="button"  value="창작자 페이지로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='creator';" />
+    <input type="button"  value="후원자 페이지로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='supporterpage';" />
 
 </center>
 </body>

@@ -40,6 +40,29 @@ public class MainController {
     private SpringJpaService springJpaService;
     private String id;
     private String pw;
+    Character onlinegameValue = 'N';
+    Character offlinegameValue = 'N';
+    Character publicationValue = 'N';
+    Character concertValue = 'N';
+    Character techValue = 'N';
+    Character eduValue = 'N';
+    Character socialValue = 'N';
+    Character donateValue = 'N';
+    Character sportsValue = 'N';
+    Character travelValue = 'N';
+    Character hobbyValue = 'N';
+    Character designValue = 'N';
+    Character homelivingValue = 'N';
+    Character petValue = 'N';
+    Character beautyValue = 'N';
+    Character festivalValue = 'N';
+    Character webtoonValue = 'N';
+    Character photoValue = 'N';
+    Character movieValue = 'N';
+    Character musicValue = 'N';
+    Character artValue = 'N';
+    Character foodValue = 'N';
+    Character fashionValue = 'N';
 
     public String getUserId(){
         return id;
@@ -146,6 +169,7 @@ public class MainController {
         return "index";
     }
 
+
     @GetMapping("/categorySelect")
     public String getCategorySelect(){
         return "categorySelect";
@@ -154,9 +178,9 @@ public class MainController {
 
     @RequestMapping(value = "/categoryResult", method = RequestMethod.POST)
     @ResponseBody
-    public String makePostEcho(@RequestBody String data, Model model) {
+    public String makePostEcho(@RequestBody String data, Model model) throws SQLException {
 
-        UserEntity user;
+
         Vector<String> categoryVector = new Vector<String>();
         System.out.println("data: " + data);
         int strNum = data.length();
@@ -172,64 +196,121 @@ public class MainController {
                 completeWord = completeWord + data.charAt(strNum-1);
             }
         }
-/*
-        Character onlinegameValue = 'N';
-        Character offlinegameValue = 'N';
-        Character publicationValue = 'N';
-        Character concertValue = 'N';
-        Character techValue = 'N';
-        Character eduValue = 'N';
-        Character socialValue = 'N';
-        Character donateValue = 'N';
-        Character sportsValue = 'N';
-        Character travelValue = 'N';
-        Character hobbyValue = 'N';
-        Character designValue = 'N';
-        Character homelivingValue = 'N';
-        Character petValue = 'N';
-        Character beautyValue = 'N';
-        Character festivalValue = 'N';
-        Character webtoonValue = 'N';
-        Character photoValue = 'N';
-        Character movieValue = 'N';
-        Character musicValue = 'N';
-        Character artValue = 'N';
-        Character foodValue = 'N';
-        Character fashionValue = 'N';
+
+
         for(int i = 0; i < categoryVector.size(); i++){
-             String categoryValue = categoryVector.elementAt(i);
+            String categoryValue = categoryVector.elementAt(i);
             switch (categoryValue) {
-                case "onlinegame": onlinegameValue = 'Y';break;
-                case "offlinegame": offlinegameValue = 'Y';break;
-                case "publication": publicationValue = 'Y';break;
-                case "show": concertValue = 'Y';break;
-                case "tech": techValue = 'Y';break;
-                case "edu": eduValue = 'Y';break;
-                case "social": socialValue = 'Y';break;
-                case "donate": donateValue = 'Y';break;
-                case "sports": sportsValue = 'Y';break;
-                case "travel": travelValue = 'Y';break;
-                case "hobby": hobbyValue = 'Y';break;
-                case "design": designValue = 'Y';break;
-                case "homeliving": homelivingValue = 'Y';break;
-                case "pet": petValue = 'Y';break;
-                case "beauty": beautyValue = 'Y';break;
-                case "festival": festivalValue = 'Y';break;
-                case "webtoon": webtoonValue = 'Y';break;
-                case "photo": photoValue = 'Y';break;
-                case "music": musicValue = 'Y';break;
-                case "art": artValue = 'Y';break;
-                case "food": foodValue = 'Y';break;
-                case "fashion": fashionValue = 'Y';break;
+                case "온라인게임": onlinegameValue = 'Y';break;
+                case "오프라인게임": offlinegameValue = 'Y';break;
+                case "출판": publicationValue = 'Y';break;
+                case "공연": concertValue = 'Y';break;
+                case "테크": techValue = 'Y';break;
+                case "교육·키즈": eduValue = 'Y';break;
+                case "소셜·캠페인": socialValue = 'Y';break;
+                case "기부·후원": donateValue = 'Y';break;
+                case "스포츠·모빌리티": sportsValue = 'Y';break;
+                case "여행·레저": travelValue = 'Y';break;
+                case "취미": hobbyValue = 'Y';break;
+                case "디자인": designValue = 'Y';break;
+                case "홈리빙": homelivingValue = 'Y';break;
+                case "반려동물": petValue = 'Y';break;
+                case "뷰티": beautyValue = 'Y';break;
+                case "페스티벌": festivalValue = 'Y';break;
+                case "만화": webtoonValue = 'Y';break;
+                case "사진": photoValue = 'Y';break;
+                case "음악": musicValue = 'Y';break;
+                case "영화·비디오": movieValue = 'Y';break;
+                case "예술": artValue = 'Y';break;
+                case "푸드": foodValue = 'Y';break;
+                case "패션": fashionValue = 'Y';break;
             }
-            //System.out.println(categoryVector.elementAt(i));
+            System.out.println(categoryVector.elementAt(i));
         }
         //product에서 적합한 프로젝트들 가져와서 json으로 다시 만들기...
         //userdb에 카테고리 categoryVector 내용 옮기기
+
+        Connection conn;
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
+        java.sql.Statement stmt = conn.createStatement();
+        System.out.println("db 연결 성공");
+
+        //springJpaService.updateUser(id, categoryVector);
+
+
+        System.out.println("id : "+id);
+        UserEntity user = new UserEntity(id);
+        System.out.println("user:"+user);
+        StringBuilder sb1 = new StringBuilder();
+
+        /*sb.append("update test.user set onlinegame = ?, offlinegame = ?," +
+                "publication = ?, tech =?, edu = ? , social =?, donate = ? , sports = ?, travel = ?, hobby =?, design = ?" +
+                ", homeliving =?, pet = ?, beauty =?, festival = ?, webtoon =?, photo = ?, movie =? , music = ?, art = ?" +
+                ", food = ?, fashion = ?, concert = ? where name = ?;");
+
+
+
+        jdbc.update(sb.toString(),onlinegameValue,offlinegameValue,publicationValue,techValue,eduValue,socialValue,donateValue,
+                    sportsValue,travelValue,hobbyValue,homelivingValue,petValue,beautyValue,festivalValue,webtoonValue,photoValue,movieValue,musicValue,artValue,
+                    foodValue,fashionValue,concertValue,id);
 */
-
-
-        springJpaService.updateUser(id, categoryVector);
+        String sql1 = sb1.append("update test.user set"+
+                " onlinegame = '")
+                .append(onlinegameValue)
+                .append("', offlinegame = '")
+                .append(offlinegameValue)
+                .append("', publication = '")
+                .append(publicationValue)
+                .append("', tech = '")
+                .append(techValue)
+                .append("', edu = '")
+                .append(eduValue)
+                .append("', social = '")
+                .append(socialValue)
+                .append("', donate = '")
+                .append(donateValue)
+                .append("', sports = '")
+                .append(sportsValue)
+                .append("', travel = '")
+                .append(travelValue)
+                .append("', hobby = '")
+                .append(hobbyValue)
+                .append("', design = '")
+                .append(designValue)
+                .append("', homeliving = '")
+                .append(homelivingValue)
+                .append("', pet = '")
+                .append(petValue)
+                .append("', beauty = '")
+                .append(beautyValue)
+                .append("', festival = '")
+                .append(festivalValue)
+                .append("', webtoon = '")
+                .append(webtoonValue)
+                .append("', photo = '")
+                .append(photoValue)
+                .append("', movie = '")
+                .append(movieValue)
+                .append("', music = '")
+                .append(musicValue)
+                .append("', art = '")
+                .append(artValue)
+                .append("', food = '")
+                .append(foodValue)
+                .append("', fashion = '")
+                .append(fashionValue)
+                .append("', concert = '")
+                .append(concertValue)
+                .append("' where name = '")
+                .append(id)
+                .append("';").toString();
+        System.out.println("sql : "+sql1);
+        try {
+            stmt.executeUpdate(sql1);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
 
         // userdb 내용 읽어오기 0
@@ -251,6 +332,10 @@ public class MainController {
         return "redirect:/categorySelect";
 
     }
+    @RequestMapping(value="/loading", method = RequestMethod.GET)
+    public String loading(Model model){
+        return "loading2";
+    }
 
     @RequestMapping(value="/categoryResult", method = RequestMethod.GET,produces = "text/html; charset=UTF8")
     public String getCategoryResult(Model model) throws SQLException {
@@ -260,7 +345,7 @@ public class MainController {
             Thread.sleep(5000);
         }catch(InterruptedException e){}
 
-        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "0000");
+        conn = java.sql.DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC", "root", "wdta2181");
         java.sql.Statement stmt = conn.createStatement();
         System.out.println("db 연결 성공");
 

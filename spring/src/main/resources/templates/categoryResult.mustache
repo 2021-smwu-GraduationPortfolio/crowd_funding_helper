@@ -16,17 +16,14 @@
             selectedEls.forEach((el) => {
             result += el.id + ' ';
             });
+            result = result + 's' + 'p';
             // 출력
-            document.getElementById('result').innerText = result;
+
+            // document.getElementById('result').innerText = result;
             //resultArray[resultArray.length] = result;
            // resultArray = Arrays.asList(result.split(" "));
             console.log(result)
             // document.getElementById('resultArray').innerText = resultArray;
-
-            var element = document.getElementById("zzimList");
-            if(element.style.display == 'none'){
-                    element.style.display='block';
-                }
 
 
 
@@ -46,26 +43,37 @@ function clickNext() {
     sendData.open('POST', '/cart/buy', true);
     sendData.send(result);
 }
+
     </script>
 </head>
 <body>
-<h3 align="center">찜한 프로젝트가 없습니다</h3>
-<h3 align="center">마음에 드는 프로젝트를 선택해주세요</h3>
-<h3 align="center">찜하려면 체크</h3>
+
+<h3 align="center">
+    마음에 드는 프로젝트를 찜하려면 체크버튼을 누르세요
+</h3>
 
 <center>
     <form method = "post", action="/cart/buy">
-        {{#categories}}
-            <h8>{{category}} - {{id}} : <a href = {{url}}>{{title}}</a> {{pagename}}</h8>
-            <input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}">찜하기
-            <br>
-        {{/categories}}
+        <table border="1" bordercolor="black" align="center" height="300">
+            <th bgcolor="#e3f2fd">카테고리</th>
+            <th bgcolor="#e3f2fd">제목</th>
+            <th bgcolor="#e3f2fd">사이트명</th>
+            <th bgcolor="#e3f2fd">좋아요</th>
+            {{#categories}}
+                <tr>
+                    <td align="center">{{category}}</td>
+                    <td><a href = {{url}}>{{title}}</a></td>
+                    <td align="center">{{pagename}}</td>
+                    <td align="center"><input type="checkbox" name="chk_info" id="{{id}}" value ="{{id}}"></td>
+                </tr>
+            {{/categories}}
+        </table>
     </form>
+
     <br>
-    <button class="save"  type="button" onClick="getCheckboxValue()">저장</button>
+
+    <button class="save"  type="button" style="width: 100px; font-size: large; height: 30px; background-color: white" onClick="getCheckboxValue();clickNext();self.location='/cart/loading';">완료</button>
     <br>
-    <div id='result' name='result'></div>
-    <button type="button" id="zzimList" style ="display:none" onclick="clickNext();self.location='/cart/loading';" >완료</button>
 
 </center>
 </body>

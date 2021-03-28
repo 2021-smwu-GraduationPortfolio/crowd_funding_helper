@@ -51,18 +51,47 @@
 </head>
 <body>
 <center>
-    <h1> funding creator </h1><br>
+    <h3> 여기는 창작자 페이지입니다 </h3>
+    <br>
+    <div style="border: 0.3px solid #1b1e21;width:810px">
+
+        <Text style="font-size: 1em;">
+            <br>검색 옵션을 "개설할 프로젝트 제목 입력"으로 선택하면 개설할 프로젝트 카테고리와 제목을 입력해주세요<br>
+            검색 옵션을 "개설할 프로젝트 키워드 입력"으로 선택하면 개설할 프로젝트 카테고리와 키워드를 입력해주세요
+            <br></Text>
+        <br>
+    </div>
+    <br>
+    <h4>예시</h4>
+    <div style="display: inline-block; width: 250px;border-right-style:solid;text-align: left">
+        <Text>▼ 개설할 프로젝트 제목 입력</Text>
+        <br>
+        <Text>&nbsp;&nbsp;&nbsp;&nbsp;카테고리 : 만화<br>&nbsp;&nbsp;&nbsp;&nbsp;제목 : 3D바디 포즈모음</Text>
+    </div>
+
+    <div style="display: inline-block; width: 250px;text-align: left">
+        <Text>
+            ▼ 개설할 프로젝트 키워드 입력<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;카테고리 : demo1<br>&nbsp;&nbsp;&nbsp;&nbsp;키워드 : demo1</Text>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
     <select id="dropselect">
-        <option value="">- 선택 -</option>
-        <option value="title">타이틀 입력</option>
-        <option value="keyword">키워드 입력</option>
+        <option value="">-검색 옵션 선택-</option>
+        <option value="title">개설할 프로젝트 제목 입력</option>
+        <option value="keyword">개설할 프로젝트 키워드 입력</option>
     </select>
-    <input type="button" value="확인" onclick="ModeSelect();" />
+    <input type="button" value="확인" style="background-color: white" onclick="ModeSelect();" />
 
     <span id="titlepage" style ="display:none">
       <form method="POST", action="/creatortitle">
+          <br>
+          <br>
         <b>
-          Category :  <select id="categoryselect" name="ca", onChange="CategorySelect();">
+          카테고리 :  <select id="categoryselect" name="ca", style="background-color: white"onChange="CategorySelect();">
                         <option value="푸드">푸드</option>
                         <option value="패션">패션</option>
                         <option value="반려동물">반려동물</option>
@@ -88,15 +117,17 @@
                         <option value="뷰티">뷰티</option>
                       </select>
             <br><br>
-          Title :  <input type="text", name='a', placeholder="enter 1"> <br><br>
+          제목 :  <input type="text", name='a', placeholder="enter 1"> <br><br>
         </b>
-        <input type="submit" , value='결과 보기' >
+        <input type="submit" , value='결과 보기', style="background-color: white" >
       </form>
     </span>
 
     <div id="keywordpage" style="display:none">
         <form method="POST", action="/creatorkeyword">
-            <b> Category :  <select id="categoryselect" name="ca", onChange="CategorySelect();">
+            <br>
+            <br>
+            <b> 카테고리 :  <select id="categoryselect" name="ca", style="background-color: white" onChange="CategorySelect();">
                 <option value="푸드">푸드</option>
                 <option value="패션">패션</option>
                 <option value="반려동물">반려동물</option>
@@ -122,18 +153,20 @@
                 <option value="뷰티">뷰티</option>
             </select>
                 <br><br>
-                Keyword :  <input type="text", required name='a', placeholder="keyword"> <br><br>
+                키워드 :  <input type="text", required name='a', placeholder="keyword"> <br><br>
             </b>
-            <input type="submit" , value='결과 보기' >
+            <br>
+            <br>
+
+            <input type="submit" style="background-color:white; width: 140px; font-size: large; height: 30px;", value='결과 보기' >
         </form>
     </div>
     <div align="bottom" align="center">
-        <br><br>
-        <a href='/'>go back to home page</a>
+        <br><br><br>
         <br>
-        <a href='/creator'>go back to creator</a>
-        <br>
-        <a href='/supporterpage'>go back to supporter</a>
+        <input type="button"  value="홈으로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='/';" />
+        <input type="button"  value="창작자 페이지로 가기" style="width: 200px; font-size: large; border:0; outline:0; height: 30px;;background-color: white" onClick="self.location='creator';" />
+
     </div>
 </center>
 </body>
