@@ -40,29 +40,7 @@ public class MainController {
     private SpringJpaService springJpaService;
     private String id;
     private String pw;
-    Character onlinegameValue = 'N';
-    Character offlinegameValue = 'N';
-    Character publicationValue = 'N';
-    Character concertValue = 'N';
-    Character techValue = 'N';
-    Character eduValue = 'N';
-    Character socialValue = 'N';
-    Character donateValue = 'N';
-    Character sportsValue = 'N';
-    Character travelValue = 'N';
-    Character hobbyValue = 'N';
-    Character designValue = 'N';
-    Character homelivingValue = 'N';
-    Character petValue = 'N';
-    Character beautyValue = 'N';
-    Character festivalValue = 'N';
-    Character webtoonValue = 'N';
-    Character photoValue = 'N';
-    Character movieValue = 'N';
-    Character musicValue = 'N';
-    Character artValue = 'N';
-    Character foodValue = 'N';
-    Character fashionValue = 'N';
+
 
     public String getUserId(){
         return id;
@@ -181,6 +159,9 @@ public class MainController {
     public String makePostEcho(@RequestBody String data, Model model) throws SQLException {
 
 
+        System.out.println("id : "+id);
+        UserEntity user = new UserEntity(id);
+
         Vector<String> categoryVector = new Vector<String>();
         System.out.println("data: " + data);
         int strNum = data.length();
@@ -196,7 +177,29 @@ public class MainController {
                 completeWord = completeWord + data.charAt(strNum-1);
             }
         }
-
+        Character onlinegameValue = user.getOnlinegame();
+        Character offlinegameValue = user.getOfflinegame();
+        Character publicationValue = user.getPublication();
+        Character concertValue = user.getConcert();
+        Character techValue = user.getTech();
+        Character eduValue = user.getEdu();
+        Character socialValue = user.getSocial();
+        Character donateValue = user.getDonate();
+        Character sportsValue = user.getSports();
+        Character travelValue = user.getTravel();
+        Character hobbyValue = user.getHobby();
+        Character designValue = user.getDesign();
+        Character homelivingValue = user.getHomeliving();
+        Character petValue = user.getPet();
+        Character beautyValue = user.getBeauty();
+        Character festivalValue = user.getFestival();
+        Character webtoonValue = user.getWebtoon();
+        Character photoValue = user.getPhoto();
+        Character movieValue = user.getMovie();
+        Character musicValue = user.getMusic();
+        Character artValue = user.getArt();
+        Character foodValue = user.getFood();
+        Character fashionValue = user.getFashion();
 
         for(int i = 0; i < categoryVector.size(); i++){
             String categoryValue = categoryVector.elementAt(i);
@@ -238,8 +241,6 @@ public class MainController {
         //springJpaService.updateUser(id, categoryVector);
 
 
-        System.out.println("id : "+id);
-        UserEntity user = new UserEntity(id);
         System.out.println("user:"+user);
         StringBuilder sb1 = new StringBuilder();
 
@@ -313,6 +314,7 @@ public class MainController {
         }
 
 
+        //출처: https://sime.tistory.com/83 [심이 블로그]
         // userdb 내용 읽어오기 0
         // userdb 내용 수정하기 0
         //userdb에 카테고리 categoryVector 내용 옮기기 0
