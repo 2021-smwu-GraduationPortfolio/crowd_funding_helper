@@ -22,7 +22,6 @@ function getCheckboxValue()  {
     }
 
 
-
 }
 function clickNext() {
     var sendData = new XMLHttpRequest();

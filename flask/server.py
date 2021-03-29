@@ -1,4 +1,4 @@
-# -*- conding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from gensim.models import Word2Vec
 import pickle
@@ -37,7 +37,7 @@ model30 = Word2Vec.load('NaverMovie30.model')
 
 app = Flask(__name__)
 
-article_data_10 = pd.read_csv('mixver11.txt', encoding='utf-8', header= None)
+article_data_10 = pd.read_csv('mixver10.txt', encoding='utf-8', header= None)
 documents_10 = [' '.join(i[0].split(' ')[1:]) for i in article_data_10.values]
 
 article_data_9 = pd.read_csv('mixver9.txt', encoding='utf-8', header= None)
@@ -117,12 +117,19 @@ def getresset(similar_word_set, category, curs):
             length = 3
 
         for k in range(0,length):
-            res_list.append((pagename[k][0], pagename[k][1], pagename[k][2], pagename[k][3], pagename[k][4]))   # pagename, title, achieve, goal
+            title = pagename[k][1].replace(u'\xa0', u' ') 
+            logger.info('tite type : ')
+            logger.info(type(title))
+            logger.info('pagename[k][1] type : ')
+            logger.info(type(pagename[k][1]))
+            
+            res_list.append((pagename[k][0], title, pagename[k][2], pagename[k][3], pagename[k][4]))   # pagename, title, achieve, goal
             # logger.info('res_list')
             # logger.info(res_list)
     res_set = set(res_list)
     logger.info('res_set')
     logger.info(res_set)
+
     return res_set
 
 def getCreatorPredList(res_set, curs, conn) :
@@ -158,7 +165,7 @@ def getcnt(res_set):
 
 def creatortitle(category, title):
     logger.info("before connect")
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',port=3306,db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
     logger.info('title')
     logger.info(title)
@@ -169,10 +176,16 @@ def creatortitle(category, title):
     tokenized_project_title = set(okt.nouns(title))
     logger.info('tokenized_project_title')
     logger.info(tokenized_project_title)
+    logger.info(type(tfidf_dict_10))
+    
+    rake = ['뱃지', '가방', '환경', '주간', '와디', '집사', '기념', '패딩', '효율', '웜뱃', '항균', '바디', '이상', '가성', '노하우', '캘린더', '한정', '자석', '스티커', '리버', '성적', '식물성', '섹스', '문구', '실용', '기름', '특허성', '주인공', '세트', '공식', '동시', '패드', '우드', '양말', '모이', '품질', '사람', '니트', '눈덧신토끼', '위시', '과학', '생존', '걱정', '진리', '품격', '한국', '육회', '신경과학', '스타', '공기', '리듬게임', '앵콜', '고유', '유지', '리버시', '기록', '탐방', '해결', '데스크', '입지', '어머니', '방향', '해치', '마일', '작가', '포스터', '레이', '삼치', '손글씨', '노트', '서랍', '순간', '가격', '퀄리티', '바지', '인터뷰', '싱어송라이터', '레밋', '특화', '곳도', '세상', '크리스마스', '강아지', '인투', '나이트', '자기', '스칼렛', '사용', '옆집', '하루', '생각', '온전', '바오', '소재', '연구', '뮤지컬', '대학교', '방식', '표현', '실패', '펜더', '영화제', '여친', '구성', '아가', '달력', '페이지스', '빅픽처', '맞춤법', '카드', '티셔츠', '애플', '차량', '비서실', '스포츠', '폼클렌저', '비키', '개운', '누리', '기억', '가시', '스타일', '집중', '놀이', '교육', '마술', '선물', '피어', '홈텐더', '버스', '음반', '일상', '캐릭터', '건강', '유네스코', '재기', '혼자', '기차', '인류', '단편영화', '모던', '포트폴리오', '만들기', '향기', '방석', '바다', '블렌더', '공간', '무드', '원화', '이해', '플레이', '익명', '청춘', '붙이', '기분', '빈티', '애용', '케이스', '느낌', '기능', '리아', '키트', '고향', '케냐', '천상병', '프로젝트', '갈피', '커플링', '미술관', '소리', '시작', '레몬', '김치', '이름', '기기', '우울', '드라이브', '활용', '레이아웃', '숲속', '에세이', '여행', '여자', '시절', '경험', '냄새', '머리', '호박', '앰플', '패션', '중요성', '가장', '함유량', '플라워', '수기', '아리차', '사랑', '이태리', '설계', '아이', '무스', '여정', '공구', '그때', '육아', '브랜드', '입다', '유해', '발효', '오프', '정규', '공존', '고양이', '네이버웹툰', '구도', '실내', '휴대', '서체', '시대', '렌즈', '헤럴드', '살균제', '만족', '전시회', '서나', '바람막이', '그림', '전골', '사이즈', '퍼포먼스', '양털', '공자', '향수', '누적', '여기', '워시', '자수', '천연', '자리', '컬러', '마음', '체험', '하늬', '성폭력', '지기', '핸드', '탈취', '완성', '레깅스', '시리즈', '재탄생', '도마', '토트', '탈모', '바보', '컬렉션', '퍼스트', '한눈', '파우치', '마스크', '여성', '하우스', '유리컵', '양념', '쥬얼리', '논리', '월렛', '깔창', '필수', '워커', '설악산', '소설', '생활', '요리', '요리사', '효소', '용어', '권력', '가을', '성주목', '슬랙스핏', '반지', '책가방', '안감', '쿠셔닝', '캠핑', '괴담', '추리', '중독', '일기', '끝내', '부담', '숨숨', '사과', '오메가', '전하', '카혼', '크림', '오빠', '알다', '피크', '점퍼', '운동복', '무대', '시계', '국민', '이니셜', '단백질', '아노락', '원조', '찜질', '쓰기', '나주', '와플', '지갑', '전자', '공개', '홀로', '에디', '쿠션', '흰둥이', '컴퓨터', '자켓', '뮬러', '강수', '피부', '겨울', '코듀', '커피', '요가', '리운스', '눈앞', '아치', '생산', '유통', '경량', '콜드', '상업', '롤러코스터', '블락', '대로', '고기', '서포터', '제리', '한국어', '다이아몬드', '초콜릿', '반짝', '포투', '이불', '두루', '스마트', '수건', '마케팅', '스케치업', '반려', '라이트백', '조화', '방어', '제주', '가향', '브이', '벤데타', '히트', '캐리어', '편안함', '국내', '펀딩', '드라이', '버터', '오픈', '리얼', '드루', '특허', '불꽃심장', '회사', '감성', '후기', '영감', '수분', '수분크림', '월경', '여름방학', '퍼스', '선택', '보습', '테크', '취미', '무게', '모집', '스웨터', '행운', '페스', '하자', '이야기', '용기', '카키', '어워드', '퍼센트', '매일', '실현', '다리', '기술', '프로', '닭고기', '쫄깃', '별로', '다운', '확인', '엑스트라', '한양', '제작', '체크', '웹툰', '작업', '방법', '담요', '세계', '장착', '장인', '폴딩', '매트', '미니미', '나은', '지식', '올해', '케이블', '어묵', '화장', '만족도', '투잡', '남자', '귀환', '코팅', '하주', '무릎', '프린터기', '누구', '살균', '테크니컬', '포즈', '트래블러', '명기', '주택가', '입양', '쭉쭉', '채굴', '정장', '치킨', '서명', '정리', '괴물', '개발', '실화', '장벽', '아르기닌', '히알루론산', '프리미엄', '다비드', '응원', '무량']
+    #logger.info(rake)
 
+    tfidf_dict = tfidf_dict_10 + rake
+    tfidf_dict_set = set(tfidf_dict)
     selected_word = []
     for i in tokenized_project_title:
-        if i in tfidf_dict_10:
+        if i in tfidf_dict_set:
             selected_word.append(i)
             continue
     similar_word_list = []
@@ -194,7 +207,7 @@ def creatortitle(category, title):
     return pred
 
 def creatorkeyword(category, keyword):
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',port=3306,db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
 
     selected_word = keyword.split(' ')
@@ -313,7 +326,7 @@ def binder(client_socket, addr):
         #client_socket.close();
 
 def supporterpage(username):
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',port=3306,db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
     curs = conn.cursor()
 
     logger.info("supporterpage 안")

@@ -108,7 +108,6 @@ public class HelloController {
     public String SupporterPage(Principal principal, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("utf-8");
 
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         String username = user.getUsername();

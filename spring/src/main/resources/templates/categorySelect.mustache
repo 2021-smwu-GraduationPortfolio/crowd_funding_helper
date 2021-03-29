@@ -47,6 +47,9 @@
 
 
         <br><br>
+        {{^sessionedUser}}
+            <input type="button" value="선택" style="width: 100px; font-size: large;  height: 30px; background-color: white" onClick="clickNext(); self.location='/'" />
+        {{/sessionedUser}}
         {{#sessionedUser}}
             <input type="button" value="선택" style="width: 100px; font-size: large; height: 30px; background-color: white" onClick="clickNext(); self.location='/loading'" />
         {{/sessionedUser}}
