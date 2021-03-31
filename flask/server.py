@@ -331,7 +331,7 @@ def supporterpage(username):
 
     logger.info("supporterpage 안")
 
-    sql = "select distinct trim(I.title) from test.picklist I, test.crawl C where email = '%s' and C.title = I.title;"%username
+    sql = "select distinct trim(I.title) from test.picklist I, test.crawl C where email = '%s' and C.title = I.title and role='supporter';"%username
     curs.execute(sql)
     sent = curs.fetchall()
     logger.info("sent")
