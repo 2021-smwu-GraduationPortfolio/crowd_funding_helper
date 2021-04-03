@@ -165,7 +165,7 @@ def getcnt(res_set):
 
 def creatortitle(category, title):
     logger.info("before connect")
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='0000',db='test', charset='utf8')
     curs = conn.cursor()
     logger.info('title')
     logger.info(title)
@@ -207,7 +207,7 @@ def creatortitle(category, title):
     return pred
 
 def creatorkeyword(category, keyword):
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='0000',db='test', charset='utf8')
     curs = conn.cursor()
 
     selected_word = keyword.split(' ')
@@ -326,7 +326,7 @@ def binder(client_socket, addr):
         #client_socket.close();
 
 def supporterpage(username):
-    conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', user='root', password='0000',db='test', charset='utf8')
     curs = conn.cursor()
 
     logger.info("supporterpage 안")

@@ -21,7 +21,7 @@ import konlpy
 from konlpy.tag import Okt
 
 
-conn = pymysql.connect(host='127.0.0.1', user='root', password='wdta2181',db='test', charset='utf8')
+conn = pymysql.connect(host='127.0.0.1', user='root', password='0000',db='test', charset='utf8')
 curs = conn.cursor()
 
 sql = 'select trim(title) from test.crawl'
